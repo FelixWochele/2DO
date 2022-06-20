@@ -5,9 +5,11 @@
 [![forthebadge made-with-C-Scharf](https://forthebadge.com/images/badges/made-with-c-sharp.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/DHBW-Inf20/2048/)
 
-### Dokumentationen der Mitglieder:
+## Dokumentation
 
 [Hier gehts zu den Dokumentationen!](https://google.com/)
+
+## Git:
 
 ### clone:
 ```shell
