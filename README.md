@@ -1,4 +1,4 @@
-# Programmieren Praxisprojekt - 2048
+# Programmieren Praxisprojekt - C#
 
 <img align="right" width="220" height="90" src="https://upload.wikimedia.org/wikipedia/de/thumb/1/1d/DHBW-Logo.svg/541px-DHBW-Logo.svg.png?20110626153129">
 
