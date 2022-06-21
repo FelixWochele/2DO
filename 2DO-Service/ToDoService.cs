@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-namespace _2DO_Server
+namespace _2DO_Service
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
@@ -15,7 +15,7 @@ namespace _2DO_Server
         //Lists
         public bool AddTaskList(TaskList customer)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool RemoveLTaskist(TaskList customer)
@@ -43,17 +43,18 @@ namespace _2DO_Server
         }
 
         //Category
-        public bool AddCategory(Categorie customer)
+        public bool AddCategorie(Categorie customer)
         {
             throw new NotImplementedException();
         }
-        public bool RemoveCategory(Categorie customer)
+        public bool RemoveCategorie(Categorie customer)
         {
             throw new NotImplementedException();
         }
-        public List<Categorie> GetAllCategorys()
+        public List<Categorie> GetAllCategories()
         {
             throw new NotImplementedException();
         }
+
     }
 }

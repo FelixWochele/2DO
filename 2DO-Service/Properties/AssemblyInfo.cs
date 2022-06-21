@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("2DO-Server")]
+[assembly: AssemblyTitle("2DO-Service")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("2DO-Server")]
+[assembly: AssemblyProduct("2DO-Service")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6ab219bb-9a63-4d18-9d20-be5b4cc38949")]
+[assembly: Guid("d52e1a13-aad8-4b68-b400-d9dc5a3966a4")]
 
 // Version information for an assembly consists of the following four values:
 //

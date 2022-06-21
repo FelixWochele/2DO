@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-namespace _2DO_Server
+namespace _2DO_Service
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
@@ -30,10 +30,10 @@ namespace _2DO_Server
 
         //Category
         [OperationContract]
-        bool AddCategory(Categorie customer);
+        bool AddCategorie(Categorie customer);
         [OperationContract]
-        bool RemoveCategory(Categorie customer);
+        bool RemoveCategorie(Categorie customer);
         [OperationContract]
-        List<Categorie> GetAllCategorys();
+        List<Categorie> GetAllCategories();
     }
 }
