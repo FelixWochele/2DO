@@ -12,6 +12,10 @@ namespace _2DO_Service
     [ServiceContract]
     public interface IToDoService
     {
+
+        [OperationContract]
+        string Test();
+
         //Lists
         [OperationContract]
         bool AddTaskList(TaskList customer);

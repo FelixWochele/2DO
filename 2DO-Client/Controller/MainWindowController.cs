@@ -53,8 +53,14 @@ namespace _2DO_Client.Controller
         public async void Test()
         {
             Trace.WriteLine("Node1");
-            if(await mServiceController.AddTaskListAsync(new TaskList()))
-                Trace.WriteLine("hjgj");
+
+            var test = new TaskList();
+            test.Comment = "TestComment";
+            test.Description = "TestDesc";
+            test.Version = 63;
+
+            var res = await mServiceController.TestAsync();
+            Trace.WriteLine(res);
             Trace.WriteLine("Node2");
 
         }

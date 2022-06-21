@@ -13,20 +13,20 @@ namespace _2DO_Server.Database.Maps
     { 
         public TaskMap()
         {
-            Table("Task");
+            Table("Tasks");
 
             Id(x => x.ID).GeneratedBy.Native();
             Map(x => x.Version).Not.Nullable();
             Map(x => x.Description).Length(100).Not.Nullable();
             Map(x => x.Comment).Length(500).Nullable();
-            Map(x => x.State).Length(100).Not.Nullable();
+            Map(x => x.State).Not.Nullable();
             Map(x => x.CreationDate).Not.Nullable();
             Map(x => x.DueDate).Nullable();
             Map(x => x.ReminderMinutes).Nullable();
             Map(x => x.Priority).Not.Nullable();
             Map(x => x.TasklistID).Not.Nullable();
 
-            References(x => x.TasklistID).Not.Nullable().Cascade.All();
+            //References(x => x.TasklistID).Column("TasklistID").Not.Nullable().Cascade.All();
         }
     }
 }

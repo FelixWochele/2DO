@@ -293,6 +293,9 @@ namespace ServiceReference1
     public interface IToDoService
     {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/Test", ReplyAction="http://tempuri.org/IToDoService/TestResponse")]
+        System.Threading.Tasks.Task<string> TestAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddTaskList", ReplyAction="http://tempuri.org/IToDoService/AddTaskListResponse")]
         System.Threading.Tasks.Task<bool> AddTaskListAsync(ServiceReference1.TaskList customer);
         
@@ -369,6 +372,11 @@ namespace ServiceReference1
         public ToDoServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
+        }
+        
+        public System.Threading.Tasks.Task<string> TestAsync()
+        {
+            return base.Channel.TestAsync();
         }
         
         public System.Threading.Tasks.Task<bool> AddTaskListAsync(ServiceReference1.TaskList customer)

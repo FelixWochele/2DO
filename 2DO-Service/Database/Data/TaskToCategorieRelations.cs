@@ -16,7 +16,7 @@ namespace _2DO_Server.Database.Data
         [DataMember]
         public int TaskID { get; set; }
         [DataMember]
-        public int CategorieID { get; set; }
+        public int CategoryID { get; set; }
         [DataMember]
         public int Version { get; set; }
 

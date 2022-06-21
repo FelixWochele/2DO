@@ -1,10 +1,12 @@
 ﻿using _2DO_Server.Database.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using _2DO_Service.NHibernate;
 
 namespace _2DO_Service
 {
@@ -12,10 +14,51 @@ namespace _2DO_Service
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ToDoService : IToDoService
     {
+        private INHibernateHelper nHibernateHelper;
+        /*
+        public ToDoService()
+        {
+            nHibernateHelper = new NHibernateHelper();
+            nHibernateHelper.OpenSession();
+        }
+        */
+        public string Test()
+        {
+            nHibernateHelper = new NHibernateHelper();
+            nHibernateHelper.OpenSession();
+
+
+            Console.WriteLine("Test");
+
+            var test = new TaskList();
+            test.Comment = "TestComment";
+            test.Description = "TestDesc";
+            test.Version = 63;
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.SaveOrUpdate(test);
+
+                transaction.Commit();
+            }
+
+            return "Felix";
+        }
+        
         //Lists
         public bool AddTaskList(TaskList customer)
         {
-            return true;
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.SaveOrUpdate(customer);
+
+                transaction.Commit();
+            }
+            return false;
         }
 
         public bool RemoveLTaskist(TaskList customer)
