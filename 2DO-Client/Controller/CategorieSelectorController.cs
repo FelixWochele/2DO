@@ -15,7 +15,11 @@ namespace _2DO_Client.Controller
 
         public override ViewModelBase Initialize()
         {
-            mCategorieSelectorViewModel = new CategorieSelectorViewModel();
+            if (mCategorieSelectorViewModel == null)
+            {
+                mCategorieSelectorViewModel = new CategorieSelectorViewModel();
+            }
+
             return mCategorieSelectorViewModel;
         }
 

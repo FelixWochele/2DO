@@ -17,7 +17,11 @@ namespace _2DO_Client.Controller
 
         public override ViewModelBase Initialize()
         {
-            mViewModel = new ListSelectorViewModel();
+            if (mViewModel == null)
+            {
+                mViewModel = new ListSelectorViewModel();
+            }
+            
             return mViewModel;
         }
 

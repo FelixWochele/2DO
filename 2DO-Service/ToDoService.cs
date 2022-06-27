@@ -16,7 +16,6 @@ namespace _2DO_Service
     public class ToDoService : IToDoService
     {
         private INHibernateHelper nHibernateHelper;
-        private int i; 
 
         public bool InitNHibernate()
         {
@@ -29,7 +28,6 @@ namespace _2DO_Service
         #region TaskLists
         public bool AddTaskList(TaskList taskList)
         {
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -44,7 +42,6 @@ namespace _2DO_Service
 
         public bool RemoveLTaskist(TaskList taskList)
         {
-            i++;
 
             using (var session = nHibernateHelper.OpenSession())
             {
@@ -77,7 +74,6 @@ namespace _2DO_Service
         #region Tasks
         public bool AddTask(Task task)
         {
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -91,7 +87,6 @@ namespace _2DO_Service
         }
         public bool RemoveTask(Task task)
         {
-            i++;
 
             using (var session = nHibernateHelper.OpenSession())
             {
@@ -106,6 +101,7 @@ namespace _2DO_Service
         }
         public List<Task> GetAllTasks()
         {
+
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -122,7 +118,6 @@ namespace _2DO_Service
         #region Category
         public bool AddCategorie(Categorie categorie)
         {
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -136,8 +131,6 @@ namespace _2DO_Service
         }
         public bool RemoveCategorie(Categorie categorie)
         {
-            i++;
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -167,19 +160,11 @@ namespace _2DO_Service
         #region CategoryToTasks
         public bool AddCategorieToTask(TaskToCategorieRelations categorieToTask)
         {
-            var testData = new TaskToCategorieRelations();
-
-            testData.Version = 63;
-            testData.TaskID = 1;
-            testData.CategoryID = 1;
-
-            i++;
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
 
-                session.SaveOrUpdate(testData);
+                session.SaveOrUpdate(categorieToTask);
 
                 transaction.Commit();
             }
@@ -188,8 +173,6 @@ namespace _2DO_Service
         }
         public bool RemoveCategorieToTask(TaskToCategorieRelations categorieToTask)
         {
-            i++;
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();

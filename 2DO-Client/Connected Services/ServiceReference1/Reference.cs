@@ -288,6 +288,73 @@ namespace ServiceReference1
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TaskToCategorieRelations", Namespace="http://schemas.datacontract.org/2004/07/_2DO_Server.Database.Data")]
+    public partial class TaskToCategorieRelations : object
+    {
+        
+        private int CategoryIDField;
+        
+        private int IDField;
+        
+        private int TaskIDField;
+        
+        private int VersionField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CategoryID
+        {
+            get
+            {
+                return this.CategoryIDField;
+            }
+            set
+            {
+                this.CategoryIDField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ID
+        {
+            get
+            {
+                return this.IDField;
+            }
+            set
+            {
+                this.IDField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TaskID
+        {
+            get
+            {
+                return this.TaskIDField;
+            }
+            set
+            {
+                this.TaskIDField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Version
+        {
+            get
+            {
+                return this.VersionField;
+            }
+            set
+            {
+                this.VersionField = value;
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IToDoService")]
     public interface IToDoService
@@ -352,6 +419,24 @@ namespace ServiceReference1
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllCategories", ReplyAction="http://tempuri.org/IToDoService/GetAllCategoriesResponse")]
         System.Threading.Tasks.Task<ServiceReference1.Categorie[]> GetAllCategoriesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddCategorieToTask", ReplyAction="http://tempuri.org/IToDoService/AddCategorieToTaskResponse")]
+        bool AddCategorieToTask(ServiceReference1.TaskToCategorieRelations categorieToTask);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddCategorieToTask", ReplyAction="http://tempuri.org/IToDoService/AddCategorieToTaskResponse")]
+        System.Threading.Tasks.Task<bool> AddCategorieToTaskAsync(ServiceReference1.TaskToCategorieRelations categorieToTask);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveCategorieToTask", ReplyAction="http://tempuri.org/IToDoService/RemoveCategorieToTaskResponse")]
+        bool RemoveCategorieToTask(ServiceReference1.TaskToCategorieRelations categorieToTask);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveCategorieToTask", ReplyAction="http://tempuri.org/IToDoService/RemoveCategorieToTaskResponse")]
+        System.Threading.Tasks.Task<bool> RemoveCategorieToTaskAsync(ServiceReference1.TaskToCategorieRelations categorieToTask);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllCategoriesToTasks", ReplyAction="http://tempuri.org/IToDoService/GetAllCategoriesToTasksResponse")]
+        ServiceReference1.TaskToCategorieRelations[] GetAllCategoriesToTasks();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllCategoriesToTasks", ReplyAction="http://tempuri.org/IToDoService/GetAllCategoriesToTasksResponse")]
+        System.Threading.Tasks.Task<ServiceReference1.TaskToCategorieRelations[]> GetAllCategoriesToTasksAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
@@ -502,6 +587,36 @@ namespace ServiceReference1
         public System.Threading.Tasks.Task<ServiceReference1.Categorie[]> GetAllCategoriesAsync()
         {
             return base.Channel.GetAllCategoriesAsync();
+        }
+        
+        public bool AddCategorieToTask(ServiceReference1.TaskToCategorieRelations categorieToTask)
+        {
+            return base.Channel.AddCategorieToTask(categorieToTask);
+        }
+        
+        public System.Threading.Tasks.Task<bool> AddCategorieToTaskAsync(ServiceReference1.TaskToCategorieRelations categorieToTask)
+        {
+            return base.Channel.AddCategorieToTaskAsync(categorieToTask);
+        }
+        
+        public bool RemoveCategorieToTask(ServiceReference1.TaskToCategorieRelations categorieToTask)
+        {
+            return base.Channel.RemoveCategorieToTask(categorieToTask);
+        }
+        
+        public System.Threading.Tasks.Task<bool> RemoveCategorieToTaskAsync(ServiceReference1.TaskToCategorieRelations categorieToTask)
+        {
+            return base.Channel.RemoveCategorieToTaskAsync(categorieToTask);
+        }
+        
+        public ServiceReference1.TaskToCategorieRelations[] GetAllCategoriesToTasks()
+        {
+            return base.Channel.GetAllCategoriesToTasks();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceReference1.TaskToCategorieRelations[]> GetAllCategoriesToTasksAsync()
+        {
+            return base.Channel.GetAllCategoriesToTasksAsync();
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()

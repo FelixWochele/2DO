@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using _2DO_Client.Framework;
@@ -25,6 +26,9 @@ namespace _2DO_Client.Controller
 
         private ToDoServiceClient mServiceController;
 
+        private CategorieSelectorController areaCategorysSelectorController;
+        private ListSelectorController areaListSelectorController; 
+
         public void Initialize()
         {
             mMainWindowView.ShowDialog();
@@ -39,6 +43,9 @@ namespace _2DO_Client.Controller
             mMainWindowView = new MainWindowView();
             mMainWindowViewModel = new MainWindowViewModel();
 
+            areaCategorysSelectorController = new CategorieSelectorController();
+            areaListSelectorController = new ListSelectorController();
+
             mMainWindowView.DataContext = mMainWindowViewModel;
 
             mMainWindowViewModel.ShowCategorieSelectorCommand = new RelayCommand(ExecuteCategorieSelectorCommand);
@@ -50,46 +57,61 @@ namespace _2DO_Client.Controller
 
             //Init Submodule -> List
             ExecuteListSelectorCommand(new object());
-            
-            mMainWindowViewModel.TaskModels.Add(GetTaskTestData());
-
-            
-
 
             //Start WCF Service
             mServiceController = serviceController.mToDoService;
 
-            Test();
+            var test = mServiceController.InitNHibernate();
+            Trace.WriteLine(test);
 
+            Thread.Sleep(5000);
 
+            //Inital get the Data
+            InitGetData();
 
-            //var task = Task.Run(async () => await Test());
-
-
-            //mViewModel.AddCommand = new RelayCommand(ExecuteAddCommand);
-            //mViewModel.DeleteCommand = new RelayCommand(ExecuteDeleteCommand, CanExecuteDeleteCommand);
+            //Execute Some Test Methods
+            //Test();
         }
 
 
+
+        #region InitGetData
+        public void InitGetData()
+        {
+            
+            var allTasks = mServiceController.GetAllTasks();
+
+            foreach (var task in allTasks)
+            {
+                mMainWindowViewModel.TaskModels.Add(task);
+            }
+
+            var allCategories = mServiceController.GetAllCategories();
+
+            foreach (var category in allCategories)
+            {
+                areaCategorysSelectorController.AddElement(category);
+            }
+
+            var allTaskLists = mServiceController.GetAllTaskLists();
+
+            foreach (var tasks in allTaskLists)
+            {
+                areaListSelectorController.AddElement(tasks);
+            }
+        }
+        #endregion
+
+        #region Commands
         private void ExecuteCategorieSelectorCommand(object obj)
         {
-            CategorieSelectorController areaViewController = new CategorieSelectorController();
-            mMainWindowViewModel.ActiveViewModel = areaViewController.Initialize();
-
-
-            areaViewController.AddElement(GetCategorieTestData());
+            mMainWindowViewModel.ActiveViewModel = areaCategorysSelectorController.Initialize();
         }
 
         private void ExecuteListSelectorCommand(object obj)
         {
-            ListSelectorController areaViewController = new ListSelectorController();
-            mMainWindowViewModel.ActiveViewModel = areaViewController.Initialize();
-
-            
-
-            areaViewController.AddElement(GetTaskListTestData());
+            mMainWindowViewModel.ActiveViewModel = areaListSelectorController.Initialize();
         }
-
 
         private void ExecuteCategorieTaskAddCommand(object obj)
         {
@@ -105,10 +127,6 @@ namespace _2DO_Client.Controller
 
         private void ExecuteTaskAddCommand(object obj)
         {
-
-
-
-
             throw new NotImplementedException();
             //TODO: DB ADD
         }
@@ -118,6 +136,7 @@ namespace _2DO_Client.Controller
             //TODO: DB Delete
 
         }
+        #endregion
 
         #region For Debuging Reasons
 
@@ -160,12 +179,13 @@ namespace _2DO_Client.Controller
         {
             Trace.WriteLine("Node1");
 
-            var test = new TaskList();
-            test.Comment = "TestComment";
-            test.Description = "TestDesc";
-            test.Version = 63;
+            
 
             var res = mServiceController.InitNHibernate();
+
+
+
+
             Trace.WriteLine(res);
             Trace.WriteLine("Node2");
 
