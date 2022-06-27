@@ -4,9 +4,196 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2DO_Client.Views"
+        xmlns:viewModels="clr-namespace:_2DO_Client.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="MainWindowView" Height="450" Width="800">
+        Title="MainWindowView" Height="550" Width="900" MinWidth="900" MinHeight="550"
+        Background="WhiteSmoke">
+
+    <Window.Resources>
+        <viewModels:SubmoduleSelector x:Key="TemplateSelector" />
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="DarkGray"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#a2a7a9"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyleListSelector" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FFABADB3"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9"/>
+        <Style x:Key="MainListBoxStyle" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Border}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true"/>
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Button Style="{DynamicResource ButtonStyleListSelector}" Grid.Row="2" Grid.Column="1" Command="{Binding ShowListSelectorCommand}" Margin="0 5 5 5">
+            <StackPanel>
+                <!-- <Image Source="https://cdn-icons-png.flaticon.com/512/151/151917.png" Height="20" Width="20"/> -->
+                <TextBlock Foreground="Black">Listen</TextBlock>
+            </StackPanel>
+        </Button>
+        <Button Grid.Row="2" Grid.Column="2" Command="{Binding ShowCategorieSelectorCommand}" Style="{DynamicResource ButtonStyleListSelector}" Margin="5 5 0 5">
+            <StackPanel Orientation="Horizontal">
+                <!-- <Image Source="https://cdn-icons.flaticon.com/png/512/3517/premium/3517174.png?token=exp=1656319135~hmac=8d906c26016e8710b478e82ddaaaed55" Height="18" Width="18"/> -->
+                <TextBlock Foreground="Black">Kategorien</TextBlock>
+            </StackPanel>
+        </Button>
+
+
+
+        <ContentControl Grid.Column="1" Grid.Row="3" Grid.RowSpan="8" Grid.ColumnSpan="2" Content="{Binding ActiveViewModel}" ContentTemplateSelector="{StaticResource TemplateSelector}">
+            <ContentControl.Resources>
+                <DataTemplate x:Key="listSelectorViewTemplate">
+                    <local:ListSelectorView/>
+                </DataTemplate>
+                <DataTemplate x:Key="categorieSelectorViewTemplate">
+                    <local:CategorieSelectorView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+        <ListBox Style="{DynamicResource MainListBoxStyle}" Grid.Row="2" Grid.Column="4" Grid.RowSpan="9" Grid.ColumnSpan="4" ItemsSource="{Binding TaskModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <TextBlock FontWeight="Bold" Text="{Binding Path=Comment}"></TextBlock>
+                        <TextBlock>
+                            <Run Text="{Binding Path=Comment}"/>
+                            <Run Text="|"/>
+                            <Run Text="{Binding Path=CreationDate}"/> 
+                            <Run Text=" - "/>
+                            <Run Text="{Binding Path=DueDate}"/>
+                            <Run Text="|"/>
+                            <Run Text="{Binding Path=State}"/>
+                        </TextBlock>
+                    </WrapPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Row="11" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Command="{Binding ListCategorieAddButton}" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  10 0" Width="25" Height="25">-</Button>
+            <Button Command="{Binding ListCategorieDeleteButton}" Background="WhiteSmoke" Foreground="Gray"  BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  0 0" Width="25" Height="25">+</Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="11" Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Command="{Binding TaskAddButton}" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  10 0" Width="25" Height="25">-</Button>
+            <Button Command="{Binding TaskDeleteButton}" Background="WhiteSmoke" Foreground="Gray"  BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  0 0" Width="25" Height="25">+</Button>
+        </StackPanel>
+
     </Grid>
 </Window>
