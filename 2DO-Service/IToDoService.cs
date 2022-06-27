@@ -14,13 +14,13 @@ namespace _2DO_Service
     {
 
         [OperationContract]
-        string Test();
+        bool InitNHibernate();
 
         //Lists
         [OperationContract]
-        bool AddTaskList(TaskList customer);
+        bool AddTaskList(TaskList taskList);
         [OperationContract]
-        bool RemoveLTaskist(TaskList customer);
+        bool RemoveLTaskist(TaskList taskList);
         [OperationContract]
         List<TaskList> GetAllTaskLists();
 
@@ -39,5 +39,13 @@ namespace _2DO_Service
         bool RemoveCategorie(Categorie customer);
         [OperationContract]
         List<Categorie> GetAllCategories();
+
+        //CategoryToTasks
+        [OperationContract]
+        bool AddCategorieToTask(TaskToCategorieRelations categorieToTask);
+        [OperationContract]
+        bool RemoveCategorieToTask(TaskToCategorieRelations categorieToTask);
+        [OperationContract]
+        List<TaskToCategorieRelations> GetAllCategoriesToTasks();
     }
 }

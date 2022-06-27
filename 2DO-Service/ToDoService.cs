@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using _2DO_Service.NHibernate;
+using NHibernate;
 
 namespace _2DO_Service
 {
@@ -15,89 +16,204 @@ namespace _2DO_Service
     public class ToDoService : IToDoService
     {
         private INHibernateHelper nHibernateHelper;
-        /*
-        public ToDoService()
+        private int i; 
+
+        public bool InitNHibernate()
         {
             nHibernateHelper = new NHibernateHelper();
             nHibernateHelper.OpenSession();
+
+            return true;
         }
-        */
-        public string Test()
+
+        #region TaskLists
+        public bool AddTaskList(TaskList taskList)
         {
-            nHibernateHelper = new NHibernateHelper();
-            nHibernateHelper.OpenSession();
-
-
-            Console.WriteLine("Test");
-
-            var test = new TaskList();
-            test.Comment = "TestComment";
-            test.Description = "TestDesc";
-            test.Version = 63;
 
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
 
-                session.SaveOrUpdate(test);
+                session.SaveOrUpdate(taskList);
 
                 transaction.Commit();
             }
 
-            return "Felix";
+            return true;
         }
-        
-        //Lists
-        public bool AddTaskList(TaskList customer)
+
+        public bool RemoveLTaskist(TaskList taskList)
         {
+            i++;
+
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
 
-                session.SaveOrUpdate(customer);
+                session.Delete(taskList);
 
                 transaction.Commit();
             }
-            return false;
-        }
 
-        public bool RemoveLTaskist(TaskList customer)
-        {
-            throw new NotImplementedException();
+            return true;
         }
 
         public List<TaskList> GetAllTaskLists()
         {
-            throw new NotImplementedException();
-        }
 
-        //Items
-        public bool AddTask(Task customer)
-        {
-            throw new NotImplementedException();
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                var returnList = session.QueryOver<TaskList>().List();
+
+                transaction.Commit();
+
+                return returnList as List<TaskList>;
+            }
         }
-        public bool RemoveTask(Task customer)
+        #endregion
+
+        #region Tasks
+        public bool AddTask(Task task)
         {
-            throw new NotImplementedException();
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.SaveOrUpdate(task);
+
+                transaction.Commit();
+            }
+
+            return true;
+        }
+        public bool RemoveTask(Task task)
+        {
+            i++;
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.Delete(task);
+
+                transaction.Commit();
+            }
+
+            return true;
         }
         public List<Task> GetAllTasks()
         {
-            throw new NotImplementedException();
-        }
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
 
-        //Category
-        public bool AddCategorie(Categorie customer)
-        {
-            throw new NotImplementedException();
+                var returnList = session.QueryOver<Task>().List();
+
+                transaction.Commit();
+
+                return returnList as List<Task>;
+            }
         }
-        public bool RemoveCategorie(Categorie customer)
+        #endregion
+
+        #region Category
+        public bool AddCategorie(Categorie categorie)
         {
-            throw new NotImplementedException();
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.SaveOrUpdate(categorie);
+
+                transaction.Commit();
+            }
+
+            return true;
+        }
+        public bool RemoveCategorie(Categorie categorie)
+        {
+            i++;
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.Delete(categorie);
+
+                transaction.Commit();
+            }
+
+            return true;
         }
         public List<Categorie> GetAllCategories()
         {
-            throw new NotImplementedException();
-        }
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
 
+                var returnList = session.QueryOver<Categorie>().List();
+
+                transaction.Commit();
+
+                return returnList as List<Categorie>;
+            }
+        }
+        #endregion
+
+        #region CategoryToTasks
+        public bool AddCategorieToTask(TaskToCategorieRelations categorieToTask)
+        {
+            var testData = new TaskToCategorieRelations();
+
+            testData.Version = 63;
+            testData.TaskID = 1;
+            testData.CategoryID = 1;
+
+            i++;
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.SaveOrUpdate(testData);
+
+                transaction.Commit();
+            }
+
+            return true;
+        }
+        public bool RemoveCategorieToTask(TaskToCategorieRelations categorieToTask)
+        {
+            i++;
+
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                session.Delete(categorieToTask);
+
+                transaction.Commit();
+            }
+
+            return true;
+        }
+        public List<TaskToCategorieRelations> GetAllCategoriesToTasks()
+        {
+            using (var session = nHibernateHelper.OpenSession())
+            {
+                var transaction = session.BeginTransaction();
+
+                var returnList = session.QueryOver<TaskToCategorieRelations>().List();
+
+                transaction.Commit();
+
+                return returnList as List<TaskToCategorieRelations>;
+            }
+        }
+        #endregion
     }
 }

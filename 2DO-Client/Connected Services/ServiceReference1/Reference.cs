@@ -293,32 +293,62 @@ namespace ServiceReference1
     public interface IToDoService
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/Test", ReplyAction="http://tempuri.org/IToDoService/TestResponse")]
-        System.Threading.Tasks.Task<string> TestAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/InitNHibernate", ReplyAction="http://tempuri.org/IToDoService/InitNHibernateResponse")]
+        bool InitNHibernate();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/InitNHibernate", ReplyAction="http://tempuri.org/IToDoService/InitNHibernateResponse")]
+        System.Threading.Tasks.Task<bool> InitNHibernateAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddTaskList", ReplyAction="http://tempuri.org/IToDoService/AddTaskListResponse")]
-        System.Threading.Tasks.Task<bool> AddTaskListAsync(ServiceReference1.TaskList customer);
+        bool AddTaskList(ServiceReference1.TaskList taskList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddTaskList", ReplyAction="http://tempuri.org/IToDoService/AddTaskListResponse")]
+        System.Threading.Tasks.Task<bool> AddTaskListAsync(ServiceReference1.TaskList taskList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveLTaskist", ReplyAction="http://tempuri.org/IToDoService/RemoveLTaskistResponse")]
-        System.Threading.Tasks.Task<bool> RemoveLTaskistAsync(ServiceReference1.TaskList customer);
+        bool RemoveLTaskist(ServiceReference1.TaskList taskList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveLTaskist", ReplyAction="http://tempuri.org/IToDoService/RemoveLTaskistResponse")]
+        System.Threading.Tasks.Task<bool> RemoveLTaskistAsync(ServiceReference1.TaskList taskList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllTaskLists", ReplyAction="http://tempuri.org/IToDoService/GetAllTaskListsResponse")]
+        ServiceReference1.TaskList[] GetAllTaskLists();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllTaskLists", ReplyAction="http://tempuri.org/IToDoService/GetAllTaskListsResponse")]
         System.Threading.Tasks.Task<ServiceReference1.TaskList[]> GetAllTaskListsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddTask", ReplyAction="http://tempuri.org/IToDoService/AddTaskResponse")]
+        bool AddTask(ServiceReference1.Task customer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddTask", ReplyAction="http://tempuri.org/IToDoService/AddTaskResponse")]
         System.Threading.Tasks.Task<bool> AddTaskAsync(ServiceReference1.Task customer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveTask", ReplyAction="http://tempuri.org/IToDoService/RemoveTaskResponse")]
+        bool RemoveTask(ServiceReference1.Task customer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveTask", ReplyAction="http://tempuri.org/IToDoService/RemoveTaskResponse")]
         System.Threading.Tasks.Task<bool> RemoveTaskAsync(ServiceReference1.Task customer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllTasks", ReplyAction="http://tempuri.org/IToDoService/GetAllTasksResponse")]
+        ServiceReference1.Task[] GetAllTasks();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllTasks", ReplyAction="http://tempuri.org/IToDoService/GetAllTasksResponse")]
         System.Threading.Tasks.Task<ServiceReference1.Task[]> GetAllTasksAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddCategorie", ReplyAction="http://tempuri.org/IToDoService/AddCategorieResponse")]
+        bool AddCategorie(ServiceReference1.Categorie customer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/AddCategorie", ReplyAction="http://tempuri.org/IToDoService/AddCategorieResponse")]
         System.Threading.Tasks.Task<bool> AddCategorieAsync(ServiceReference1.Categorie customer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveCategorie", ReplyAction="http://tempuri.org/IToDoService/RemoveCategorieResponse")]
+        bool RemoveCategorie(ServiceReference1.Categorie customer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/RemoveCategorie", ReplyAction="http://tempuri.org/IToDoService/RemoveCategorieResponse")]
         System.Threading.Tasks.Task<bool> RemoveCategorieAsync(ServiceReference1.Categorie customer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllCategories", ReplyAction="http://tempuri.org/IToDoService/GetAllCategoriesResponse")]
+        ServiceReference1.Categorie[] GetAllCategories();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IToDoService/GetAllCategories", ReplyAction="http://tempuri.org/IToDoService/GetAllCategoriesResponse")]
         System.Threading.Tasks.Task<ServiceReference1.Categorie[]> GetAllCategoriesAsync();
@@ -374,19 +404,39 @@ namespace ServiceReference1
         {
         }
         
-        public System.Threading.Tasks.Task<string> TestAsync()
+        public bool InitNHibernate()
         {
-            return base.Channel.TestAsync();
+            return base.Channel.InitNHibernate();
         }
         
-        public System.Threading.Tasks.Task<bool> AddTaskListAsync(ServiceReference1.TaskList customer)
+        public System.Threading.Tasks.Task<bool> InitNHibernateAsync()
         {
-            return base.Channel.AddTaskListAsync(customer);
+            return base.Channel.InitNHibernateAsync();
         }
         
-        public System.Threading.Tasks.Task<bool> RemoveLTaskistAsync(ServiceReference1.TaskList customer)
+        public bool AddTaskList(ServiceReference1.TaskList taskList)
         {
-            return base.Channel.RemoveLTaskistAsync(customer);
+            return base.Channel.AddTaskList(taskList);
+        }
+        
+        public System.Threading.Tasks.Task<bool> AddTaskListAsync(ServiceReference1.TaskList taskList)
+        {
+            return base.Channel.AddTaskListAsync(taskList);
+        }
+        
+        public bool RemoveLTaskist(ServiceReference1.TaskList taskList)
+        {
+            return base.Channel.RemoveLTaskist(taskList);
+        }
+        
+        public System.Threading.Tasks.Task<bool> RemoveLTaskistAsync(ServiceReference1.TaskList taskList)
+        {
+            return base.Channel.RemoveLTaskistAsync(taskList);
+        }
+        
+        public ServiceReference1.TaskList[] GetAllTaskLists()
+        {
+            return base.Channel.GetAllTaskLists();
         }
         
         public System.Threading.Tasks.Task<ServiceReference1.TaskList[]> GetAllTaskListsAsync()
@@ -394,9 +444,19 @@ namespace ServiceReference1
             return base.Channel.GetAllTaskListsAsync();
         }
         
+        public bool AddTask(ServiceReference1.Task customer)
+        {
+            return base.Channel.AddTask(customer);
+        }
+        
         public System.Threading.Tasks.Task<bool> AddTaskAsync(ServiceReference1.Task customer)
         {
             return base.Channel.AddTaskAsync(customer);
+        }
+        
+        public bool RemoveTask(ServiceReference1.Task customer)
+        {
+            return base.Channel.RemoveTask(customer);
         }
         
         public System.Threading.Tasks.Task<bool> RemoveTaskAsync(ServiceReference1.Task customer)
@@ -404,9 +464,19 @@ namespace ServiceReference1
             return base.Channel.RemoveTaskAsync(customer);
         }
         
+        public ServiceReference1.Task[] GetAllTasks()
+        {
+            return base.Channel.GetAllTasks();
+        }
+        
         public System.Threading.Tasks.Task<ServiceReference1.Task[]> GetAllTasksAsync()
         {
             return base.Channel.GetAllTasksAsync();
+        }
+        
+        public bool AddCategorie(ServiceReference1.Categorie customer)
+        {
+            return base.Channel.AddCategorie(customer);
         }
         
         public System.Threading.Tasks.Task<bool> AddCategorieAsync(ServiceReference1.Categorie customer)
@@ -414,9 +484,19 @@ namespace ServiceReference1
             return base.Channel.AddCategorieAsync(customer);
         }
         
+        public bool RemoveCategorie(ServiceReference1.Categorie customer)
+        {
+            return base.Channel.RemoveCategorie(customer);
+        }
+        
         public System.Threading.Tasks.Task<bool> RemoveCategorieAsync(ServiceReference1.Categorie customer)
         {
             return base.Channel.RemoveCategorieAsync(customer);
+        }
+        
+        public ServiceReference1.Categorie[] GetAllCategories()
+        {
+            return base.Channel.GetAllCategories();
         }
         
         public System.Threading.Tasks.Task<ServiceReference1.Categorie[]> GetAllCategoriesAsync()

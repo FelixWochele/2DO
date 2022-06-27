@@ -57,9 +57,9 @@ namespace _2DO_Client.Controller
 
 
             //Start WCF Service
-            //mServiceController = serviceController.mToDoService;
+            mServiceController = serviceController.mToDoService;
 
-            //Test();
+            Test();
 
 
 
@@ -156,7 +156,7 @@ namespace _2DO_Client.Controller
             return testData;
         }
 
-        public async void Test()
+        public void Test()
         {
             Trace.WriteLine("Node1");
 
@@ -165,7 +165,7 @@ namespace _2DO_Client.Controller
             test.Description = "TestDesc";
             test.Version = 63;
 
-            var res = await mServiceController.TestAsync();
+            var res = mServiceController.InitNHibernate();
             Trace.WriteLine(res);
             Trace.WriteLine("Node2");
 

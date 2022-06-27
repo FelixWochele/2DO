@@ -12,12 +12,12 @@ namespace _2DO_Server.Database.Maps
     {
         public TaskToCategorieRelationMap()
         {
+
+            Table("TaskToCategoryRelations");
             Id(x => x.ID).GeneratedBy.Native();
             Map(x => x.Version).Not.Nullable();
             Map(x => x.CategoryID).Not.Nullable();
             Map(x => x.TaskID).Not.Nullable();
-
-
         }
     }
 }
