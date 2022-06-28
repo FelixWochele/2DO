@@ -1,6 +1,7 @@
 ﻿using _2DO_Client.Framework;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -39,6 +40,11 @@ namespace _2DO_Client.Controller
         public void RemoveElement(TaskList getSelectedElement)
         {
             mViewModel.TaskListModels.Remove(getSelectedElement);
+        }
+
+        public void ResetModelList()
+        {
+            mViewModel.TaskListModels.Clear();
         }
     }
 }

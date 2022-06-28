@@ -13,7 +13,7 @@ namespace _2DO_Client.ViewModels
     public class CategorieSelectorViewModel : ViewModelBase
     {
 
-        public ObservableCollection<ServiceReference1.Categorie> CategorieModels { get; set; } = new ObservableCollection<ServiceReference1.Categorie>();
+        public ObservableCollection<ServiceReference1.Categorie> CategorieModels { get; set; } = new();
 
         public Categorie SelectedItem { get; set; }
 

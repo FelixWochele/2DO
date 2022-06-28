@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using _2DO_Service.NHibernate;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
 using NHibernate;
 
 namespace _2DO_Service
@@ -22,6 +25,8 @@ namespace _2DO_Service
         {
             nHibernateHelper = new NHibernateHelper();
             //nHibernateHelper.OpenSession();
+
+
             return true;
         }
 
@@ -60,6 +65,8 @@ namespace _2DO_Service
 
             using (var session = nHibernateHelper.OpenSession())
             {
+                Trace.WriteLine("NODE2");
+
                 var transaction = session.BeginTransaction();
 
                 var returnList = session.QueryOver<TaskList>().List();
@@ -74,8 +81,6 @@ namespace _2DO_Service
         #region Tasks
         public bool AddTask(Task task)
         {
-
-            
 
             using (var session = nHibernateHelper.OpenSession())
             {
@@ -113,8 +118,6 @@ namespace _2DO_Service
                 transaction.Commit();
 
                 return returnList as List<Task>;
-
-                
             }
         }
         #endregion

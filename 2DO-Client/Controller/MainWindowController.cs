@@ -1,15 +1,8 @@
-﻿using _2DO_Client.ViewModels;
+﻿using System.Data.Entity.Infrastructure.Design;
+using _2DO_Client.ViewModels;
 using _2DO_Client.Views;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.ServiceModel;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
 using _2DO_Client.Framework;
 using _2DO_Client.Service;
 using Autofac;
@@ -58,9 +51,9 @@ namespace _2DO_Client.Controller
             mMainWindowViewModel.ListCategorieTaskListDeleteButton = new RelayCommand(ExecuteCategorieTaskListDeleteCommand);
             mMainWindowViewModel.ListCategorieTaskListEditButton = new RelayCommand(ExecuteCategorieTaskListEditCommand);
 
-            mMainWindowViewModel.TaskAddButton = new RelayCommand(ExecuteTaskAddCommand);
+            mMainWindowViewModel.TaskAddButton = new RelayCommand(ExecuteTaskAddCommand, CanExecuteTaskAddChangeCommand);
             mMainWindowViewModel.TaskDeleteButton = new RelayCommand(ExecuteTaskDeleteCommand, CanExecuteTaskDeleteCommand);
-            mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand);
+            mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand, CanExecuteTaskAddChangeCommand);
 
             //Init Submodule -> List
             ExecuteListSelectorCommand(new object());
@@ -79,34 +72,16 @@ namespace _2DO_Client.Controller
             //AddTestDataToAllWindows();
         }
 
-        #region InitGetData
         public void InitGetData()
         {
-            
-            var allTasks = mServiceController.GetAllTasks();
+            UpdateTaskListListFromDB();
 
-            foreach (var task in allTasks)
-            {
-                mMainWindowViewModel.TaskModels.Add(task);
-            }
+            UpdateCategoriesFromDB();
 
-            var allCategories = mServiceController.GetAllCategories();
-
-            foreach (var category in allCategories)
-            {
-                areaCategorysSelectorController.AddElement(category);
-            }
-
-            var allTaskLists = mServiceController.GetAllTaskLists();
-
-            foreach (var tasks in allTaskLists)
-            {
-                areaListSelectorController.AddElement(tasks);
-            }
+            UpdateTasksFromDB();
         }
-        #endregion
 
-        #region Commands
+        #region Command Category/TaskList
 
         //Submoduls
         private void ExecuteCategorieSelectorCommand(object obj)
@@ -130,17 +105,32 @@ namespace _2DO_Client.Controller
                 AddTaskListWindowController mAddTaskListWindowController =
                     mApplication.Container.Resolve<AddTaskListWindowController>();
 
+                mServiceController.AddTaskList(mAddTaskListWindowController.AddTaskList());
+
+                UpdateTaskListListFromDB();
+
+                /*
+                //If DB should not work
+
                 var retTask = mAddTaskListWindowController.AddTaskList();
 
                 if (retTask != null)
                 {
                     areaListSelectorController.AddElement(retTask);
                 }
+                */
             }
             else
             {
                 AddCategorieWindowController mAddCategorieWindowController =
                     mApplication.Container.Resolve<AddCategorieWindowController>();
+
+                mServiceController.AddCategorie(mAddCategorieWindowController.AddCategorie());
+
+                UpdateCategoriesFromDB();
+
+                /*
+                //If DB should not Work
 
                 var retTask = mAddCategorieWindowController.AddCategorie();
 
@@ -148,29 +138,31 @@ namespace _2DO_Client.Controller
                 {
                     areaCategorysSelectorController.AddElement(retTask);
                 }
+                */
             }
-
-            //TODO: DB ADD
         }
 
         private void ExecuteCategorieTaskListDeleteCommand(object obj)
         {
             if (ListIsActive)
             {
+                
                 if (areaListSelectorController.GetSelectedElement() != null)
                 {
-                    areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
+                    //areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
+                    mServiceController.RemoveLTaskist(areaListSelectorController.GetSelectedElement());
+                    UpdateTaskListListFromDB();
                 }
             }
             else
             {
                 if (areaCategorysSelectorController.GetSelectedElement() != null)
                 {
-                    areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
+                    //areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
+                    mServiceController.RemoveCategorie(areaCategorysSelectorController.GetSelectedElement());
+                    UpdateCategoriesFromDB();
                 }
             }
-
-            //TODO: DB DELETE
 
             //TODO: DB NOT ONLY DELETE TASKLIST -> DELTE TASK TO
         }
@@ -222,6 +214,10 @@ namespace _2DO_Client.Controller
 
             //TODO: DB Delete
         }
+        #endregion
+
+
+        #region Commands Tasks
 
         //Task
         private void ExecuteTaskAddCommand(object obj)
@@ -229,24 +225,37 @@ namespace _2DO_Client.Controller
             AddTaskWindowController mAddTaskWindowController =
                 mApplication.Container.Resolve<AddTaskWindowController>();
 
+            // Foreign Key
+            var task = mAddTaskWindowController.AddTask();
+
+            task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
+
+            mServiceController.AddTask(task);
+
+            UpdateTasksFromDB();
+
+            /*
             var retTask = mAddTaskWindowController.AddTask();
 
             if (retTask != null)
             {
                 mMainWindowViewModel.TaskModels.Add(retTask);
             }
-
-            //TODO: DB ADD
+            */
+        }
+        private bool CanExecuteTaskAddChangeCommand(object obj)
+        {
+            return (areaListSelectorController.GetSelectedElement() != null) && (areaCategorysSelectorController != null);
         }
 
         private void ExecuteTaskDeleteCommand(object obj)
         {
             if (mMainWindowViewModel.SelectedItem != null)
             {
-                mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
+                //mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
+                mServiceController.RemoveTask(mMainWindowViewModel.SelectedItem);
+                UpdateTasksFromDB();
             }
-
-            //TODO: DB Delete
         }
 
         private bool CanExecuteTaskDeleteCommand(object obj)
@@ -270,6 +279,44 @@ namespace _2DO_Client.Controller
 
             //TODO: DB Delete
         }
+        #endregion
+
+        #region DB Operations
+
+        private void UpdateTaskListListFromDB()
+        {
+            areaListSelectorController.ResetModelList();
+
+            var allTaskLists = mServiceController.GetAllTaskLists();
+
+            foreach (var taskList in allTaskLists)
+            {
+                areaListSelectorController.AddElement(taskList);
+            }
+        }
+
+        private void UpdateCategoriesFromDB()
+        {
+            var allCategories = mServiceController.GetAllCategories();
+
+            foreach (var category in allCategories)
+            {
+                areaCategorysSelectorController.AddElement(category);
+            }
+        }
+
+        private void UpdateTasksFromDB()
+        {
+            mMainWindowViewModel.TaskModels.Clear();
+
+            var allTasks = mServiceController.GetAllTasks();
+
+            foreach (var tasks in allTasks)
+            {
+                mMainWindowViewModel.TaskModels.Add(tasks);
+            }
+        }
+
         #endregion
 
         #region For debuging reasons only
