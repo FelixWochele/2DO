@@ -5,10 +5,12 @@
 // Description : Interface Helper for DB Access
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+using System.ServiceModel;
 using NHibernate;
 
 namespace _2DO_Service.NHibernate
 {
+    [ServiceContract]
     public interface INHibernateHelper
     {
 

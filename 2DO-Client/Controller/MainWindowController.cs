@@ -65,23 +65,18 @@ namespace _2DO_Client.Controller
             //Init Submodule -> List
             ExecuteListSelectorCommand(new object());
 
-            /*
             //Start WCF Service
             mServiceController = serviceController.mToDoService;
 
             var test = mServiceController.InitNHibernate();
             Trace.WriteLine(test);
 
-            Thread.Sleep(5000);
 
             //Inital get the Data
             InitGetData();
-            */
-
-            AddTestDataToAllWindows();
-
+            
             //Execute Some Test Methods
-            //Test();
+            //AddTestDataToAllWindows();
         }
 
         #region InitGetData

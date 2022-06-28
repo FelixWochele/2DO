@@ -8,12 +8,14 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.ServiceModel;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 
 namespace _2DO_Service.NHibernate
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class NHibernateHelper : INHibernateHelper
     {
 

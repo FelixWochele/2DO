@@ -12,16 +12,16 @@ using NHibernate;
 namespace _2DO_Service
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ToDoService : IToDoService
     {
-        private INHibernateHelper nHibernateHelper;
+
+        private INHibernateHelper nHibernateHelper { get; set; }
 
         public bool InitNHibernate()
         {
             nHibernateHelper = new NHibernateHelper();
-            nHibernateHelper.OpenSession();
-
+            //nHibernateHelper.OpenSession();
             return true;
         }
 
@@ -74,6 +74,9 @@ namespace _2DO_Service
         #region Tasks
         public bool AddTask(Task task)
         {
+
+            
+
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -101,7 +104,6 @@ namespace _2DO_Service
         }
         public List<Task> GetAllTasks()
         {
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();
@@ -111,6 +113,8 @@ namespace _2DO_Service
                 transaction.Commit();
 
                 return returnList as List<Task>;
+
+                
             }
         }
         #endregion
