@@ -174,9 +174,9 @@
                         <TextBlock>
                             <Run Text="{Binding Path=Comment}"/>
                             <Run Text="|"/>
-                            <Run Text="{Binding Path=CreationDate}"/> 
+                            <Run Text="{Binding Path=CreationDate, StringFormat={}{0:dddd, MMMM dd}}"/> 
                             <Run Text=" - "/>
-                            <Run Text="{Binding Path=DueDate}"/>
+                            <Run Text="{Binding Path=DueDate, StringFormat={}{0:dddd, MMMM dd}}"/>
                             <Run Text="|"/>
                             <Run Text="{Binding Path=State}"/>
                         </TextBlock>
@@ -184,16 +184,31 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-        <StackPanel Grid.Row="11" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Command="{Binding ListCategorieAddButton}" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  10 0" Width="25" Height="25">-</Button>
-            <Button Command="{Binding ListCategorieDeleteButton}" Background="WhiteSmoke" Foreground="Gray"  BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  0 0" Width="25" Height="25">+</Button>
+        
+        <StackPanel Grid.Row="11" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 0 0">
+            <Button Command="{Binding ListCategorieTaskListAddButton}" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/plus_icon.png" Height="20" Width="20"></Image>
+            </Button>
+            <Button Command="{Binding ListCategorieTaskListDeleteButton}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/minus_icon.png" Height="20" Width="20"></Image>
+            </Button>
+            <Button Command="{Binding ListCategorieTaskListEditButton}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 0 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/pen_icon.png" Height="20" Width="20"></Image>
+            </Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="11" Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Command="{Binding TaskAddButton}" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  10 0" Width="25" Height="25">-</Button>
-            <Button Command="{Binding TaskDeleteButton}" Background="WhiteSmoke" Foreground="Gray"  BorderThickness="0" FontWeight="Black" FontSize="20" Margin="0 0  0 0" Width="25" Height="25">+</Button>
+        <StackPanel Grid.Row="11" Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 0 0">
+            <Button Command="{Binding TaskAddButton}" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/plus_icon.png" Height="20" Width="20"></Image>
+            </Button>
+            <Button Command="{Binding TaskDeleteButton}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/minus_icon.png" Height="20" Width="20"></Image>
+            </Button>
+            <Button Command="{Binding TaskEditButton}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 0 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/pen_icon.png" Height="20" Width="20"></Image>
+            </Button>
         </StackPanel>
+
 
     </Grid>
 </Window>

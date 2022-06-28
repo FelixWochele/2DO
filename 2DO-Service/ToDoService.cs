@@ -12,7 +12,7 @@ using NHibernate;
 namespace _2DO_Service
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in both code and config file together.
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class ToDoService : IToDoService
     {
         private INHibernateHelper nHibernateHelper;

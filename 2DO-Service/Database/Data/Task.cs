@@ -26,6 +26,24 @@ namespace _2DO_Server.Database.Data
         public DateTime DueDate { get; set; }
         [DataMember]
         public int ReminderMinutes { get; set; }
+        /*
+        public int mReminderMinutes; 
+
+        [DataMember]
+        public int ReminderMinutes {
+            get
+            {
+                return ReminderMinutes;
+            }
+            set
+            {
+                if (value == 0 || value == 5 || value == 10 || value == 60 || value == 120 ||)
+                    mReminderMinutes = value;
+                else 
+                    mReminderMinutes = -1;
+            }
+        }
+        */
         [DataMember]
         public int Priority { get; set; }
         [DataMember]

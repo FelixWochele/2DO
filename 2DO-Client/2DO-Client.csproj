@@ -16,6 +16,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Views\Assets\minus_icon.png" />
+    <None Remove="Views\Assets\pen_icon.png" />
+    <None Remove="Views\Assets\plus_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Assets\minus_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Assets\pen_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Assets\plus_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Service\" />
   </ItemGroup>
 

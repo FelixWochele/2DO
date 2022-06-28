@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _2DO_Client.ViewModels;
 using Microsoft.IdentityModel.Protocols.WsAddressing;
+using ServiceReference1;
 
 namespace _2DO_Client.Controller
 {
@@ -28,6 +29,16 @@ namespace _2DO_Client.Controller
         public void AddElement(ServiceReference1.TaskList taskList)
         {
             mViewModel.TaskListModels.Add(taskList);
+        }
+
+        public ServiceReference1.TaskList GetSelectedElement()
+        {
+            return mViewModel.SelectedItem;
+        }
+
+        public void RemoveElement(TaskList getSelectedElement)
+        {
+            mViewModel.TaskListModels.Remove(getSelectedElement);
         }
     }
 }

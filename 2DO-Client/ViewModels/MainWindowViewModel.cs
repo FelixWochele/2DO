@@ -18,13 +18,13 @@ namespace _2DO_Client.ViewModels
         public ICommand ShowListSelectorCommand { get; set; }
         public ICommand ShowCategorieSelectorCommand { get; set; }
 
-		public ICommand ListCategorieAddButton { get; set; }
-
-		public ICommand ListCategorieDeleteButton { get; set; }
-
+        public ICommand ListCategorieTaskListAddButton { get; set; }
+        public ICommand ListCategorieTaskListDeleteButton { get; set; }
+        public ICommand ListCategorieTaskListEditButton { get; set; }
 		public ICommand TaskAddButton { get; set; }
+        public ICommand TaskDeleteButton { get; set; }
+        public ICommand TaskEditButton { get; set; }
 
-		public ICommand TaskDeleteButton { get; set; }
 
         public ObservableCollection<ServiceReference1.Task> TaskModels { get; set; } = new ObservableCollection<ServiceReference1.Task>();
 

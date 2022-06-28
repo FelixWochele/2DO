@@ -1,0 +1,115 @@
+﻿<Window x:Class="_2DO_Client.Views.AddTaskWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_2DO_Client.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime" d:DataContext="{d:DesignInstance Type=local:AddTaskWindowViewModel}"
+        mc:Ignorable="d"
+        Background="WhiteSmoke"
+        Title="AddTaskWindowView" Height="350" Width="800">
+
+
+
+
+<Window.Resources>
+    <Style x:Key="FocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="DarkGray"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#a2a7a9"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyleListSelector" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Name:"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center" Text="{Binding Comment}"/>
+
+        <Label Grid.Row="1" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Kommentar:"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center" Text="{Binding Description}"/>
+
+        <Label Grid.Row="2" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Daten:"/>
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <DatePicker SelectedDate="{Binding CreationDate}" VerticalAlignment="Center" Margin="0 0 10 0" Width="250"/>
+            <Image Source="/Views/Assets/minus_icon.png" Height="20" Width="20"></Image>
+            <DatePicker SelectedDate="{Binding DueDate}" VerticalAlignment="Center" Margin="10 0 0 0" Width="250"/>
+        </StackPanel>
+
+        <Label Grid.Row="3" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Reminder:"/>
+        <ComboBox ItemsSource="{Binding ReminderMinutesSelector}" SelectedItem="{Binding ReminderMinutes}" Text="{Binding ReminderMinutes}" Grid.Row="3" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center"/>
+
+        <Label Grid.Row="4" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Priority:"/>
+        <ComboBox ItemsSource="{Binding PrioritySelector}" SelectedItem="{Binding Priority}" Text="{Binding Priority}" Grid.Row="4" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center"/>
+
+        <Label Grid.Row="5" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Status:"/>
+        <CheckBox IsChecked="{Binding State}" Grid.Row="5" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center" Command="{Binding State}"></CheckBox>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Style="{DynamicResource ButtonStyleListSelector}" Command="{Binding OkCommand}" Background="#cccccc" Foreground="Black" BorderThickness="0" Width="120" Margin="10 10 10 10">Ok</Button>
+            <Button Style="{DynamicResource ButtonStyleListSelector}" Command="{Binding CancelCommand}" Background="#cccccc" BorderThickness="0" Foreground="Black" Width="120" Margin="10 10 10 10">Abbrechen</Button>
+        </StackPanel>
+    </Grid>
+</Window>
