@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:_2DO_Client.Views"
-             xmlns:viewModels="clr-namespace:_2DO_Client.ViewModels"
+             xmlns:viewModels="clr-namespace:_2DO_Client.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:ListSelectorViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="200"
              Background="White" Foreground="Azure">
@@ -52,8 +52,9 @@
     </UserControl.Resources>
     <Grid>
         <StackPanel>
-            <ListBox Style="{DynamicResource ListSelectorListBoxStyle}" ItemsSource="{Binding TaskListModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Height="390">
+            <ListBox Name="ListBox" Style="{DynamicResource ListSelectorListBoxStyle}" ItemsSource="{Binding TaskListModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Height="390">
                 <ListBox.ItemTemplate>
+                    
                     <DataTemplate>
                         <WrapPanel Orientation="Vertical">
                             <TextBlock FontWeight="Bold" Text="{Binding Path=Comment}" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>

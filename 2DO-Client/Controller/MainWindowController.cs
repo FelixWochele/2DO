@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure.Design;
+﻿using System.Collections.Generic;
+using System.Data.Entity.Infrastructure.Design;
 using _2DO_Client.ViewModels;
 using _2DO_Client.Views;
 using System.Diagnostics;
@@ -55,6 +56,8 @@ namespace _2DO_Client.Controller
             mMainWindowViewModel.TaskDeleteButton = new RelayCommand(ExecuteTaskDeleteCommand, CanExecuteTaskDeleteCommand);
             mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand, CanExecuteTaskAddChangeCommand);
 
+            mMainWindowViewModel.Select = new RelayCommand(SelectCmd);
+
             //Init Submodule -> List
             ExecuteListSelectorCommand(new object());
 
@@ -80,6 +83,13 @@ namespace _2DO_Client.Controller
 
             UpdateTasksFromDB();
         }
+
+
+        private void SelectCmd(object obj)
+        {
+            UpdateTasksFromDB();
+        }
+
 
         #region Command Category/TaskList
 
@@ -149,6 +159,17 @@ namespace _2DO_Client.Controller
                 
                 if (areaListSelectorController.GetSelectedElement() != null)
                 {
+                    var tempEle = areaListSelectorController.GetSelectedElement();
+
+                    var tasks = mServiceController.GetAllTasks()
+                        .Where(x => x.TasklistID == areaListSelectorController.GetSelectedElement().ID).ToList();
+
+                    foreach (var task in tasks)
+                    {
+                        mServiceController.RemoveTask(task);
+                    }
+                    UpdateTasksFromDB();
+
                     //areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
                     mServiceController.RemoveLTaskist(areaListSelectorController.GetSelectedElement());
                     UpdateTaskListListFromDB();
@@ -158,13 +179,23 @@ namespace _2DO_Client.Controller
             {
                 if (areaCategorysSelectorController.GetSelectedElement() != null)
                 {
+                    var tempEle = areaCategorysSelectorController.GetSelectedElement();
+
+                    var tasks = mServiceController.GetAllCategoriesToTasks()
+                        .Where(x => x.CategoryID == tempEle.ID).ToList();
+
+                    foreach (var task in tasks)
+                    {
+                        mServiceController.RemoveCategorieToTask(task);
+                    }
+
+                    //TODO: PRÜFEN
+
                     //areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
                     mServiceController.RemoveCategorie(areaCategorysSelectorController.GetSelectedElement());
                     UpdateCategoriesFromDB();
                 }
             }
-
-            //TODO: DB NOT ONLY DELETE TASKLIST -> DELTE TASK TO
         }
 
         private bool CanExecuteCategorieTaskListDeleteCommand(object obj)
@@ -186,6 +217,16 @@ namespace _2DO_Client.Controller
                 AddTaskListWindowController mAddTaskListWindowController =
                     mApplication.Container.Resolve<AddTaskListWindowController>();
 
+                var taskList = mServiceController.GetAllTaskLists()
+                    .Where(x => x.ID == areaListSelectorController.GetSelectedElement().ID).FirstOrDefault();
+
+                var newTaskList = mAddTaskListWindowController.ChangeTaskList(taskList);
+
+                mServiceController.AddTaskList(newTaskList);
+
+                UpdateTaskListListFromDB();
+
+                /*
                 var retTask = areaListSelectorController.GetSelectedElement();
 
                 mAddTaskListWindowController.ChangeTaskList(retTask);
@@ -195,12 +236,22 @@ namespace _2DO_Client.Controller
                     areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
                     areaListSelectorController.AddElement(retTask);
                 }
+                */
             }
             else
             {
                 AddCategorieWindowController mAddCategorieWindowController =
                     mApplication.Container.Resolve<AddCategorieWindowController>();
 
+
+                var catList = mServiceController.GetAllCategories()
+                    .Where(x => x.ID == areaCategorysSelectorController.GetSelectedElement().ID).FirstOrDefault();
+
+                var newCatList = mAddCategorieWindowController.ChangeCategorie(catList);
+
+                mServiceController.AddCategorie(newCatList);
+
+                /*
                 var retTask = areaCategorysSelectorController.GetSelectedElement();
 
                 mAddCategorieWindowController.ChangeCategorie(retTask);
@@ -210,12 +261,10 @@ namespace _2DO_Client.Controller
                     areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
                     areaCategorysSelectorController.AddElement(retTask);
                 }
+                */
             }
-
-            //TODO: DB Delete
         }
         #endregion
-
 
         #region Commands Tasks
 
@@ -269,6 +318,17 @@ namespace _2DO_Client.Controller
             AddTaskWindowController mAddTaskWindowController =
                 mApplication.Container.Resolve<AddTaskWindowController>();
 
+            var task = mServiceController.GetAllTasks().Where(x => x.ID == mMainWindowViewModel.SelectedItem.ID).FirstOrDefault();
+
+            var newtask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
+
+            task = newtask;
+
+            mServiceController.AddTask(task);
+
+            UpdateTasksFromDB();
+
+            /*
             var retTask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
 
             if (retTask != null)
@@ -276,8 +336,7 @@ namespace _2DO_Client.Controller
                 mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
                 mMainWindowViewModel.TaskModels.Add(retTask);
             }
-
-            //TODO: DB Delete
+            */
         }
         #endregion
 
@@ -309,14 +368,27 @@ namespace _2DO_Client.Controller
         {
             mMainWindowViewModel.TaskModels.Clear();
 
-            var allTasks = mServiceController.GetAllTasks();
-
-            foreach (var tasks in allTasks)
+            if (areaListSelectorController.GetSelectedElement() != null)
             {
-                mMainWindowViewModel.TaskModels.Add(tasks);
+                var allTasks = mServiceController.GetAllTasks().Where(x => x.TasklistID == areaListSelectorController.GetSelectedElement().ID).ToList();
+
+                foreach (var tasks in allTasks)
+                {
+                    mMainWindowViewModel.TaskModels.Add(tasks);
+                }
+            }
+            else if(areaCategorysSelectorController != null)
+            {
+                List<int> category2taskId = mServiceController.GetAllCategoriesToTasks().Where(x => x.CategoryID == areaCategorysSelectorController.GetSelectedElement().ID).Select(x => x.TaskID).ToList();
+
+                var allTasks = mServiceController.GetAllTasks().Where(x => category2taskId.Contains(x.TasklistID)).ToList();
+
+                foreach (var tasks in allTasks)
+                {
+                    mMainWindowViewModel.TaskModels.Add(tasks);
+                }
             }
         }
-
         #endregion
 
         #region For debuging reasons only

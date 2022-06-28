@@ -11,6 +11,7 @@ using _2DO_Service.NHibernate;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
+using System.Windows;
 
 namespace _2DO_Service
 {
@@ -81,7 +82,6 @@ namespace _2DO_Service
         #region Tasks
         public bool AddTask(Task task)
         {
-
             using (var session = nHibernateHelper.OpenSession())
             {
                 var transaction = session.BeginTransaction();

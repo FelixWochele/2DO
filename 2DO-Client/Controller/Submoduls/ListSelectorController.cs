@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _2DO_Client.ViewModels;
+using _2DO_Client.Views;
 using Microsoft.IdentityModel.Protocols.WsAddressing;
 using ServiceReference1;
 
@@ -16,14 +19,21 @@ namespace _2DO_Client.Controller
     {
 
         private ListSelectorViewModel mViewModel;
+        private ListSelectorView mView;
+
+        public ListSelectorController()
+        {
+            mViewModel = new();
+            mView = new();
+
+            mView.DataContext = mViewModel;
+
+            mViewModel.DoubleClick = new RelayCommand(Double_Click);
+        }
+        
 
         public override ViewModelBase Initialize()
         {
-            if (mViewModel == null)
-            {
-                mViewModel = new ListSelectorViewModel();
-            }
-            
             return mViewModel;
         }
 
@@ -46,5 +56,11 @@ namespace _2DO_Client.Controller
         {
             mViewModel.TaskListModels.Clear();
         }
+
+        public void Double_Click(object obj)
+        {
+            Trace.WriteLine("kjhsadflkjshdfkjhasdfkjhasdfjkhasdflkhjasdfhjkasdjkfhaskljdfhklasdjhf");
+        }
+
     }
 }
