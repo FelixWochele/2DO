@@ -140,7 +140,10 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <Image Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0 -20 0 0" Source="/Views/Assets/2Do_icon.png" Height="120" Width="400"></Image>
+        <!--
         <Label Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="3" Content="2Do - App" FontFamily="Segoe UI Symbol" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
+        --> 
         <Label Grid.Column="7" Grid.Row="11" Grid.ColumnSpan="3" Content="Klasurersatzleistung - Felix Wochele - TInf2020" FontFamily="Segoe UI Symbol" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontSize="8"/>
 
         <Button Style="{DynamicResource ButtonStyleListSelector}" Grid.Row="2" Grid.Column="1" Command="{Binding ShowListSelectorCommand}" Margin="0 5 5 5">
@@ -155,6 +158,9 @@
                 <TextBlock Foreground="Black">Kategorien</TextBlock>
             </StackPanel>
         </Button>
+
+        <Label Grid.Row="2" Grid.Column="6"  Grid.ColumnSpan="2" FontSize="15" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Sortieren nach:"/>
+        <ComboBox ItemsSource="{Binding SortSelector}" SelectedItem="{Binding SortSelect}" Text="{Binding SortSelect}" Grid.Row="2" Grid.Column="8" Grid.ColumnSpan="2" Height="30" Margin="10 10 20 10" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
 
 
 

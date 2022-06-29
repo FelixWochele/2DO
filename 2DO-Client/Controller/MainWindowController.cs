@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity.Infrastructure.Design;
 using _2DO_Client.ViewModels;
 using _2DO_Client.Views;
@@ -46,6 +47,24 @@ namespace _2DO_Client.Controller
 
             mMainWindowView.DataContext = mMainWindowViewModel;
 
+            IntiButtonsAndViews();
+
+            //Start WCF Service
+            mServiceController = serviceController.mToDoService;
+            var test = mServiceController.InitNHibernate();
+
+            //Init Submodule -> List
+            ExecuteListSelectorCommand(new object());
+
+            //Inital get the Data
+            InitGetData();
+            
+            //Execute Some Test Methods
+            //AddTestDataToAllWindows();
+        }
+
+        public void IntiButtonsAndViews()
+        {
             areaCategorysSelectorController = mApplication.Container.Resolve<CategorieSelectorController>();
             areaCategorysSelectorController.Initialize();
             areaCategorysSelectorController.setInstance(this);
@@ -67,107 +86,7 @@ namespace _2DO_Client.Controller
             mMainWindowViewModel.TaskExportButton = new RelayCommand(ExecuteTaskExportCommand, CanExecuteTaskExport);
             mMainWindowViewModel.TaskImportButton = new RelayCommand(ExecuteTaskImportCommand);
 
-            //Start WCF Service
-            mServiceController = serviceController.mToDoService;
-            var test = mServiceController.InitNHibernate();
-
-            //Init Submodule -> List
-            ExecuteListSelectorCommand(new object());
-
-            //Inital get the Data
-            InitGetData();
-            
-            //Execute Some Test Methods
-            //AddTestDataToAllWindows();
-        }
-
-        private void ExecuteTaskImportCommand(object obj)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            openFileDialog.Title = "Bitte wähle eine Datei aus.";
-            openFileDialog.ShowDialog();
-            var filename = openFileDialog.FileName;
-
-            XMLExportMap importMap = new XMLExportMap();
-
-            //Deserialize employee
-            var serializer = new XmlSerializer(typeof(XMLExportMap));
-
-            if (!File.Exists(filename))
-            {
-                if(filename != null)
-                    MessageBox.Show("Datei exisitiert nicht!", "2Do - Warnung");
-            }
-            else
-            {
-                using (var stream = new FileStream(filename, FileMode.Open))
-                {
-                    importMap = serializer.Deserialize(stream) as XMLExportMap;
-
-                }
-
-
-                importMap.TaskList.ID = 0;
-                mServiceController.AddTaskList(importMap.TaskList);
-
-                var taskWithId = mServiceController.GetAllTaskLists().Where(x =>
-                        (x.Comment == importMap.TaskList.Comment) && (x.Description == importMap.TaskList.Description))
-                    .FirstOrDefault();
-
-                foreach (var tasks in importMap.Tasks)
-                {
-                    tasks.ID = 0;
-                    tasks.TasklistID = taskWithId.ID;
-                    mServiceController.AddTask(tasks);
-                }
-
-                UpdateTaskListListFromDB();
-                UpdateTasksFromDB();
-
-
-            }
-        }
-
-        private void ExecuteTaskExportCommand(object obj)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            saveFileDialog.Title = "Bitte wähle eine Datei aus.";
-            saveFileDialog.ShowDialog();
-            var filename = saveFileDialog.FileName;
-
-            //Get TaskList with Tasks
-            var actualTaskList = areaListSelectorController.GetSelectedElement();
-            var tasks = mServiceController.GetAllTasks().Where(x => x.TasklistID == actualTaskList.ID).ToList();
-
-            //Create xmlExportMap object
-            var xmlObject = new XMLExportMap();
-            xmlObject.TaskList = actualTaskList;
-            xmlObject.Tasks = tasks;
-
-
-            if (File.Exists(saveFileDialog.FileName))
-            {
-                MessageBox.Show("Datei existiert bereits!", "2Do - Warnung");
-            }
-            else
-            {
-                //Deserialize employee
-                var serializer = new XmlSerializer(typeof(XMLExportMap));
-
-                using (var stream = new FileStream(saveFileDialog.FileName, FileMode.CreateNew))
-                {
-                    serializer.Serialize(stream, xmlObject);
-                }
-
-                MessageBox.Show($"Exportiervorgang abgeschlossen!\nDie Datei wurde in \"{saveFileDialog.FileName}\" gespeichert!", "2Do - Hinweis");
-            }
-        }
-
-        private bool CanExecuteTaskExport(object arg)
-        {
-            return (areaListSelectorController.GetSelectedElement() != null); 
+            mMainWindowViewModel.PropertyChanged += _viewModel_PropertyChanged;
         }
 
         public void InitGetData()
@@ -178,6 +97,52 @@ namespace _2DO_Client.Controller
 
             UpdateTasksFromDB();
         }
+
+
+        #region Sorting
+
+        private void _viewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.SortSelect))
+            {
+
+                UpdateTasksFromDB();
+
+                List<ServiceReference1.Task> temp = null;
+
+                switch (mMainWindowViewModel.mSelection)
+                {
+                    case 1:
+                        temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.CreationDate).ToList();
+                        break;
+                    case 2:
+                        temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.Comment).ToList();
+                        break;
+                    case 3:
+                        temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.DueDate).ToList();
+                        break;
+                    case 4:
+                        temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.Priority).ToList();
+                        break;
+                    case 5:
+                        temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.DueDate).ThenByDescending(x => x.Priority).ToList();
+                        break;
+                    default:
+                        break;
+                }
+
+                mMainWindowViewModel.TaskModels.Clear();
+
+                if (temp != null)
+                {
+                    foreach (var task in temp)
+                    {
+                        mMainWindowViewModel.TaskModels.Add(task);
+                    }
+                }
+            }
+        }
+        #endregion
 
         #region Command Category/TaskList
         //Submoduls
@@ -505,10 +470,10 @@ namespace _2DO_Client.Controller
 
             var task = mServiceController.GetAllTasks().Where(x => x.ID == mMainWindowViewModel.SelectedItem.ID).FirstOrDefault();
 
-            if (task != null)
-            {
-                var newtask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
+            var newtask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
 
+            if (newtask != null)
+            {
                 task = newtask;
 
                 mServiceController.AddTask(task);
@@ -534,9 +499,102 @@ namespace _2DO_Client.Controller
 
         #endregion
 
+        #region Export/Import
+
+        private void ExecuteTaskImportCommand(object obj)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog.Title = "Bitte wähle eine Datei aus.";
+            openFileDialog.ShowDialog();
+            var filename = openFileDialog.FileName;
+
+            XMLExportMap importMap = new XMLExportMap();
+
+            //Deserialize employee
+            var serializer = new XmlSerializer(typeof(XMLExportMap));
+
+            if (!File.Exists(filename))
+            {
+                if (filename != null)
+                    MessageBox.Show("Die angegebene Datei exisitiert nicht!", "2Do - Warnung");
+            }
+            else
+            {
+                using (var stream = new FileStream(filename, FileMode.Open))
+                {
+                    importMap = serializer.Deserialize(stream) as XMLExportMap;
+
+                }
+
+
+                importMap.TaskList.ID = 0;
+                mServiceController.AddTaskList(importMap.TaskList);
+
+                var taskWithId = mServiceController.GetAllTaskLists().Where(x =>
+                        (x.Comment == importMap.TaskList.Comment) && (x.Description == importMap.TaskList.Description))
+                    .FirstOrDefault();
+
+                foreach (var tasks in importMap.Tasks)
+                {
+                    tasks.ID = 0;
+                    tasks.TasklistID = taskWithId.ID;
+                    mServiceController.AddTask(tasks);
+                }
+
+                UpdateTaskListListFromDB();
+                UpdateTasksFromDB();
+
+
+            }
+        }
+
+        private void ExecuteTaskExportCommand(object obj)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog.Title = "Bitte wähle eine Datei aus.";
+            saveFileDialog.ShowDialog();
+            var filename = saveFileDialog.FileName;
+
+            //Get TaskList with Tasks
+            var actualTaskList = areaListSelectorController.GetSelectedElement();
+            var tasks = mServiceController.GetAllTasks().Where(x => x.TasklistID == actualTaskList.ID).ToList();
+
+            //Create xmlExportMap object
+            var xmlObject = new XMLExportMap();
+            xmlObject.TaskList = actualTaskList;
+            xmlObject.Tasks = tasks;
+
+
+            if (File.Exists(saveFileDialog.FileName))
+            {
+                MessageBox.Show("Die angegebene Datei existiert bereits!", "2Do - Warnung");
+            }
+            else
+            {
+                //Deserialize employee
+                var serializer = new XmlSerializer(typeof(XMLExportMap));
+
+                using (var stream = new FileStream(saveFileDialog.FileName, FileMode.CreateNew))
+                {
+                    serializer.Serialize(stream, xmlObject);
+                }
+
+                MessageBox.Show($"Exportiervorgang abgeschlossen!\nDie Datei wurde in \"{saveFileDialog.FileName}\" gespeichert!", "2Do - Hinweis");
+            }
+        }
+
+        private bool CanExecuteTaskExport(object arg)
+        {
+            return (areaListSelectorController.GetSelectedElement() != null);
+        }
+
+        #endregion
+
         #region DB Operations
 
-            private void UpdateTaskListListFromDB()
+        private void UpdateTaskListListFromDB()
         {
             areaListSelectorController.ResetModelList();
 

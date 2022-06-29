@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Views\Assets\2Do_icon.png" />
     <None Remove="Views\Assets\export_icon.png" />
     <None Remove="Views\Assets\import_icon.png" />
     <None Remove="Views\Assets\minus_icon.png" />
@@ -28,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Assets\2Do_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Assets\export_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
