@@ -14,18 +14,19 @@ namespace _2DO_Client.ViewModels
     {
         public ObservableCollection<ServiceReference1.TaskList> TaskListModels { get; set; } = new ObservableCollection<ServiceReference1.TaskList>();
 
-        public TaskList SelectedItem { get; set; }
+        private TaskList mSelectedItem;
 
-        public ICommand DoubleClick
+        public TaskList SelectedItem
         {
-            get; 
-            set;
-        }
-
-        public ICommand Mouse
-        {
-            get;
-            set;
+            get
+            {
+                return mSelectedItem;
+            }
+            set
+            {
+                mSelectedItem = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

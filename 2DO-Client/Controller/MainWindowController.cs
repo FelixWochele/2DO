@@ -62,13 +62,10 @@ namespace _2DO_Client.Controller
 
             //Start WCF Service
             mServiceController = serviceController.mToDoService;
+            var test = mServiceController.InitNHibernate();
 
             //Init Submodule -> List
             ExecuteListSelectorCommand(new object());
-
-            var test = mServiceController.InitNHibernate();
-            Trace.WriteLine(test);
-
 
             //Inital get the Data
             InitGetData();

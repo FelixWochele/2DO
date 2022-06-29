@@ -46,6 +46,7 @@ namespace _2DO_Client.Controller
 
             if (ret == true)
             {
+                //TODO: FALSCHEINGABE
                 return mViewModel.Model;
             }
 

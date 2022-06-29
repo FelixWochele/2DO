@@ -15,7 +15,20 @@ namespace _2DO_Client.ViewModels
 
         public ObservableCollection<ServiceReference1.Categorie> CategorieModels { get; set; } = new();
 
-        public Categorie SelectedItem { get; set; }
+        private Categorie mSelectedItem;
+
+        public Categorie SelectedItem
+        {
+            get
+            {
+                return mSelectedItem;
+            }
+            set
+            {
+                mSelectedItem = value;
+                OnPropertyChanged();
+            }
+        }
 
     }
 }
