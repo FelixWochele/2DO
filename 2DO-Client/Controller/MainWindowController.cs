@@ -14,6 +14,7 @@ using ServiceReference1;
 using Task = ServiceReference1.Task;
 using System.Xml.Serialization;
 using _2DO_Client.Controller.Mapping;
+using Microsoft.Win32;
 
 namespace _2DO_Client.Controller
 {
@@ -82,18 +83,25 @@ namespace _2DO_Client.Controller
 
         private void ExecuteTaskImportCommand(object obj)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog.Title = "Bitte wähle eine Datei aus.";
+            openFileDialog.ShowDialog();
+            var filename = openFileDialog.FileName;
+
             XMLExportMap importMap = new XMLExportMap();
 
             //Deserialize employee
             var serializer = new XmlSerializer(typeof(XMLExportMap));
 
-            if (!File.Exists(@"Export.xml"))
+            if (!File.Exists(filename))
             {
-                MessageBox.Show("Datei exisitiert nicht!", "2Do");
+                if(filename != null)
+                    MessageBox.Show("Datei exisitiert nicht!", "2Do - Warnung");
             }
             else
             {
-                using (var stream = new FileStream(@"Export.xml", FileMode.Open))
+                using (var stream = new FileStream(filename, FileMode.Open))
                 {
                     importMap = serializer.Deserialize(stream) as XMLExportMap;
 
@@ -123,31 +131,37 @@ namespace _2DO_Client.Controller
 
         private void ExecuteTaskExportCommand(object obj)
         {
-            var actualTaskList = areaListSelectorController.GetSelectedElement();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog.Title = "Bitte wähle eine Datei aus.";
+            saveFileDialog.ShowDialog();
+            var filename = saveFileDialog.FileName;
 
+            //Get TaskList with Tasks
+            var actualTaskList = areaListSelectorController.GetSelectedElement();
             var tasks = mServiceController.GetAllTasks().Where(x => x.TasklistID == actualTaskList.ID).ToList();
 
-
+            //Create xmlExportMap object
             var xmlObject = new XMLExportMap();
             xmlObject.TaskList = actualTaskList;
             xmlObject.Tasks = tasks;
 
 
-            if (File.Exists(@"Export.xml"))
+            if (File.Exists(saveFileDialog.FileName))
             {
-                MessageBox.Show("Datei existiert bereits!", "2Do");
+                MessageBox.Show("Datei existiert bereits!", "2Do - Warnung");
             }
             else
             {
                 //Deserialize employee
                 var serializer = new XmlSerializer(typeof(XMLExportMap));
 
-                using (var stream = new FileStream(@"Export.xml", FileMode.CreateNew))
+                using (var stream = new FileStream(saveFileDialog.FileName, FileMode.CreateNew))
                 {
                     serializer.Serialize(stream, xmlObject);
                 }
 
-                MessageBox.Show("Exportiervorgang abgeschlossen!", "2Do");
+                MessageBox.Show($"Exportiervorgang abgeschlossen!\nDie Datei wurde in \"{saveFileDialog.FileName}\" gespeichert!", "2Do - Hinweis");
             }
         }
 
