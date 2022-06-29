@@ -302,7 +302,14 @@ namespace _2DO_Client.Controller
 
                 mConnectTaskToCategorieWindowController.setList(test);
 
-                mConnectTaskToCategorieWindowController.Test();
+                var task = mConnectTaskToCategorieWindowController.Test();
+
+                var relationA = new ServiceReference1.TaskToCategorieRelations();
+
+                relationA.CategoryID = areaCategorysSelectorController.GetSelectedElement().ID;
+                relationA.TaskID = task.ID;
+
+                mServiceController.AddCategorieToTask(relationA);
 
             }
         }
@@ -313,11 +320,14 @@ namespace _2DO_Client.Controller
 
         private void ExecuteTaskDeleteCommand(object obj)
         {
-            if (mMainWindowViewModel.SelectedItem != null)
+            if (areaListSelectorController.GetSelectedElement() != null)
             {
-                //mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
-                mServiceController.RemoveTask(mMainWindowViewModel.SelectedItem);
-                UpdateTasksFromDB();
+                if (mMainWindowViewModel.SelectedItem != null)
+                {
+                    //mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
+                    mServiceController.RemoveTask(mMainWindowViewModel.SelectedItem);
+                    UpdateTasksFromDB();
+                }
             }
         }
 
