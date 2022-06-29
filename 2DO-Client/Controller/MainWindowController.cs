@@ -127,10 +127,15 @@ namespace _2DO_Client.Controller
                 AddCategorieWindowController mAddCategorieWindowController =
                     mApplication.Container.Resolve<AddCategorieWindowController>();
 
-                mServiceController.AddCategorie(mAddCategorieWindowController.AddCategorie());
+                var taskList = mAddCategorieWindowController.AddCategorie();
 
-                UpdateCategoriesFromDB();
+                if (taskList != null)
+                {
+                    mServiceController.AddCategorie(taskList);
 
+                    UpdateCategoriesFromDB();
+                }
+                
                 /*
                 //If DB should not Work
 
@@ -212,11 +217,16 @@ namespace _2DO_Client.Controller
                 var taskList = mServiceController.GetAllTaskLists()
                     .Where(x => x.ID == areaListSelectorController.GetSelectedElement().ID).FirstOrDefault();
 
-                var newTaskList = mAddTaskListWindowController.ChangeTaskList(taskList);
+                var temp = mAddTaskListWindowController.ChangeTaskList(taskList);
 
-                mServiceController.AddTaskList(newTaskList);
+                if (temp != null)
+                {
+                    var newTaskList = mAddTaskListWindowController.ChangeTaskList(taskList);
 
-                UpdateTaskListListFromDB();
+                    mServiceController.AddTaskList(newTaskList);
+
+                    UpdateTaskListListFromDB();
+                }
 
                 /*
                 var retTask = areaListSelectorController.GetSelectedElement();
@@ -277,11 +287,14 @@ namespace _2DO_Client.Controller
                 // Foreign Key
                 var task = mAddTaskWindowController.AddTask();
 
-                task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
+                if (task != null)
+                {
+                    task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
 
-                mServiceController.AddTask(task);
+                    mServiceController.AddTask(task);
 
-                UpdateTasksFromDB();
+                    UpdateTasksFromDB();
+                }
 
                 /*
                 var retTask = mAddTaskWindowController.AddTask();
@@ -304,13 +317,17 @@ namespace _2DO_Client.Controller
 
                 var task = mConnectTaskToCategorieWindowController.Test();
 
-                var relationA = new ServiceReference1.TaskToCategorieRelations();
+                if (task != null)
+                {
+                    var relationA = new ServiceReference1.TaskToCategorieRelations();
 
-                relationA.CategoryID = areaCategorysSelectorController.GetSelectedElement().ID;
-                relationA.TaskID = task.ID;
+                    relationA.CategoryID = areaCategorysSelectorController.GetSelectedElement().ID;
+                    relationA.TaskID = task.ID;
 
-                mServiceController.AddCategorieToTask(relationA);
+                    mServiceController.AddCategorieToTask(relationA);
 
+                    UpdateTasksFromDB();
+                }
             }
         }
         private bool CanExecuteTaskAddCommand(object obj)
@@ -320,14 +337,22 @@ namespace _2DO_Client.Controller
 
         private void ExecuteTaskDeleteCommand(object obj)
         {
-            if (areaListSelectorController.GetSelectedElement() != null)
+            if (areaListSelectorController.GetSelectedElement() != null && mMainWindowViewModel.SelectedItem != null)
             {
-                if (mMainWindowViewModel.SelectedItem != null)
-                {
-                    //mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
-                    mServiceController.RemoveTask(mMainWindowViewModel.SelectedItem);
-                    UpdateTasksFromDB();
-                }
+                
+                //mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
+                mServiceController.RemoveTask(mMainWindowViewModel.SelectedItem);
+                UpdateTasksFromDB();
+                
+            }
+            else if (areaCategorysSelectorController.GetSelectedElement() != null && mMainWindowViewModel.SelectedItem != null)
+            {
+                var tasksFromCat = mServiceController.GetAllCategoriesToTasks().
+                    Where(x => x.CategoryID == areaCategorysSelectorController.GetSelectedElement().ID);
+
+                var toDelete = tasksFromCat.Where(X => X.TaskID == mMainWindowViewModel.SelectedItem.ID).FirstOrDefault();
+
+                mServiceController.RemoveCategorieToTask(toDelete);
             }
         }
 
@@ -344,13 +369,16 @@ namespace _2DO_Client.Controller
 
             var task = mServiceController.GetAllTasks().Where(x => x.ID == mMainWindowViewModel.SelectedItem.ID).FirstOrDefault();
 
-            var newtask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
+            if (task != null)
+            {
+                var newtask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
 
-            task = newtask;
+                task = newtask;
 
-            mServiceController.AddTask(task);
+                mServiceController.AddTask(task);
 
-            UpdateTasksFromDB();
+                UpdateTasksFromDB();
+            }
 
             /*
             var retTask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
@@ -409,11 +437,11 @@ namespace _2DO_Client.Controller
                     mMainWindowViewModel.TaskModels.Add(tasks);
                 }
             }
-            else if(areaCategorysSelectorController != null)
+            else if(areaCategorysSelectorController.GetSelectedElement() != null)
             {
                 List<int> category2taskId = mServiceController.GetAllCategoriesToTasks().Where(x => x.CategoryID == areaCategorysSelectorController.GetSelectedElement().ID).Select(x => x.TaskID).ToList();
 
-                var allTasks = mServiceController.GetAllTasks().Where(x => category2taskId.Contains(x.TasklistID)).ToList();
+                var allTasks = mServiceController.GetAllTasks().Where(x => category2taskId.Contains(x.ID)).ToList();
 
                 foreach (var tasks in allTasks)
                 {
