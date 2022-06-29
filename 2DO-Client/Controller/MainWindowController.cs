@@ -293,8 +293,9 @@ namespace _2DO_Client.Controller
             }
             else if (areaCategorysSelectorController.GetSelectedElement() != null)
             {
-                
 
+                ConnectTaskToCategorieWindowController mConnectTaskToCategorieWindowController =
+                    mApplication.Container.Resolve<ConnectTaskToCategorieWindowController>();
 
             }
         }

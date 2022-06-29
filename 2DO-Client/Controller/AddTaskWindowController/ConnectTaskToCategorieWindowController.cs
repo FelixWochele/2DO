@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace _2DO_Client.Controller
 {
-    internal class ConnectTaskToCategorieWindowController
+    public class ConnectTaskToCategorieWindowController
     {
+
+        public ConnectTaskToCategorieWindowController()
+        {
+
+
+
+        }
+
     }
 }
