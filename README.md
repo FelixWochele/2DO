@@ -9,6 +9,22 @@
 
 [Hier gehts zu den Dokumentationen!](https://google.com/)
 
+
+## Bei Problemen:
+
+### SQL Light Fehler
+Schaune ob die Packet SQLite und System.Data.SQLite in BEIDEN Projekten instaliert sind 
+
+### Debuging funktioniert nicht
+Beim Server in den Debug einstellungen Aktivieren
+
+### Keine Verbindung zum WCF Service
+Client und Server können nicht in einer gemeinsamen Debuging Instanz von VS laufen. 
+In den einstellungen darauf achten, dass es unterschiedliche Instanzen sind.
+
+### Fehlende Bilder 
+Projekt neu clonen oder Bilder als "Build Action" : "None" und dann wieder "Ressource" oder "Content" makieren
+
 ## Git:
 
 ### clone:
