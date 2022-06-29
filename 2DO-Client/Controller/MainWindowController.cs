@@ -54,11 +54,9 @@ namespace _2DO_Client.Controller
             mMainWindowViewModel.ListCategorieTaskListDeleteButton = new RelayCommand(ExecuteCategorieTaskListDeleteCommand);
             mMainWindowViewModel.ListCategorieTaskListEditButton = new RelayCommand(ExecuteCategorieTaskListEditCommand);
 
-            mMainWindowViewModel.TaskAddButton = new RelayCommand(ExecuteTaskAddCommand, CanExecuteTaskAddChangeCommand);
+            mMainWindowViewModel.TaskAddButton = new RelayCommand(ExecuteTaskAddCommand, CanExecuteTaskAddDeleteCommand);
             mMainWindowViewModel.TaskDeleteButton = new RelayCommand(ExecuteTaskDeleteCommand, CanExecuteTaskDeleteCommand);
-            mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand, CanExecuteTaskAddChangeCommand);
-
-            mMainWindowViewModel.Select = new RelayCommand(SelectCmd);
+            mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand, CanExecuteTaskEditCommand);
 
             //Start WCF Service
             mServiceController = serviceController.mToDoService;
@@ -270,30 +268,39 @@ namespace _2DO_Client.Controller
         //Task
         private void ExecuteTaskAddCommand(object obj)
         {
-            AddTaskWindowController mAddTaskWindowController =
-                mApplication.Container.Resolve<AddTaskWindowController>();
-
-            // Foreign Key
-            var task = mAddTaskWindowController.AddTask();
-
-            task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
-
-            mServiceController.AddTask(task);
-
-            UpdateTasksFromDB();
-
-            /*
-            var retTask = mAddTaskWindowController.AddTask();
-
-            if (retTask != null)
+            if (areaListSelectorController.GetSelectedElement() != null)
             {
-                mMainWindowViewModel.TaskModels.Add(retTask);
+                AddTaskWindowController mAddTaskWindowController =
+                    mApplication.Container.Resolve<AddTaskWindowController>();
+
+                // Foreign Key
+                var task = mAddTaskWindowController.AddTask();
+
+                task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
+
+                mServiceController.AddTask(task);
+
+                UpdateTasksFromDB();
+
+                /*
+                var retTask = mAddTaskWindowController.AddTask();
+
+                if (retTask != null)
+                {
+                    mMainWindowViewModel.TaskModels.Add(retTask);
+                }
+                */
             }
-            */
+            else if (areaCategorysSelectorController.GetSelectedElement() != null)
+            {
+                
+
+
+            }
         }
-        private bool CanExecuteTaskAddChangeCommand(object obj)
+        private bool CanExecuteTaskAddDeleteCommand(object obj)
         {
-            return (areaListSelectorController.GetSelectedElement() != null) && (areaCategorysSelectorController != null);
+            return (areaListSelectorController.GetSelectedElement() != null) || (mMainWindowViewModel.SelectedItem != null);
         }
 
         private void ExecuteTaskDeleteCommand(object obj)
@@ -337,11 +344,17 @@ namespace _2DO_Client.Controller
             }
             */
         }
+
+        private bool CanExecuteTaskEditCommand(object obj)
+        {
+            return mMainWindowViewModel.SelectedItem != null;
+        }
+
         #endregion
 
-        #region DB Operations
+            #region DB Operations
 
-        private void UpdateTaskListListFromDB()
+            private void UpdateTaskListListFromDB()
         {
             areaListSelectorController.ResetModelList();
 
