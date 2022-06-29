@@ -169,11 +169,11 @@ namespace _2DO_Client.ViewModels
         {
             switch (val)
             {
-                case "-":
+                case "50%":
                     return 0;
                 case "25%":
                     return 25;
-                case "50%":
+                case "0%":
                     return 50;
                 case "75%":
                     return 75;
@@ -188,11 +188,11 @@ namespace _2DO_Client.ViewModels
             switch (val)
             {
                 case 0:
-                    return "-";
+                    return "50%";
                 case 25:
                     return "25%";
                 case 50:
-                    return "50%";
+                    return "0%";
                 case 75:
                     return "75%";
                 case 100:

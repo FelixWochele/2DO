@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:_2DO_Client.Views"
         xmlns:viewModels="clr-namespace:_2DO_Client.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="MainWindowView" Height="550" Width="900" MinWidth="900" MinHeight="550"
+        Title="2Do" Height="550" Width="900" MinWidth="900" MinHeight="550"
         Background="WhiteSmoke">
 
     <Window.Resources>
@@ -113,6 +113,7 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -122,8 +123,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -132,11 +135,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
+
+        <Label Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="3" Content="2Do - App" FontFamily="Segoe UI Symbol" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
+        <Label Grid.Column="7" Grid.Row="11" Grid.ColumnSpan="3" Content="Klasurersatzleistung - Felix Wochele - TInf2020" FontFamily="Segoe UI Symbol" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontSize="8"/>
 
         <Button Style="{DynamicResource ButtonStyleListSelector}" Grid.Row="2" Grid.Column="1" Command="{Binding ShowListSelectorCommand}" Margin="0 5 5 5">
             <StackPanel>
@@ -153,7 +158,7 @@
 
 
 
-        <ContentControl Grid.Column="1" Grid.Row="3" Grid.RowSpan="8" Grid.ColumnSpan="2" Content="{Binding ActiveViewModel}" ContentTemplateSelector="{StaticResource TemplateSelector}">
+        <ContentControl Grid.Column="1" Grid.Row="3" Grid.RowSpan="7" Grid.ColumnSpan="2" Content="{Binding ActiveViewModel}" ContentTemplateSelector="{StaticResource TemplateSelector}">
             <ContentControl.Resources>
                 <DataTemplate x:Key="listSelectorViewTemplate">
                     <local:ListSelectorView/>
@@ -164,12 +169,12 @@
             </ContentControl.Resources>
         </ContentControl>
 
-        <ListBox Style="{DynamicResource MainListBoxStyle}" Grid.Row="2" Grid.Column="4" Grid.RowSpan="9" Grid.ColumnSpan="4" ItemsSource="{Binding TaskModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray">
+        <ListBox Style="{DynamicResource MainListBoxStyle}" Grid.Row="3" Grid.Column="4" Grid.RowSpan="7" Grid.ColumnSpan="6" ItemsSource="{Binding TaskModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
-                        <TextBlock FontWeight="Bold" Text="{Binding Path=Comment}"></TextBlock>
+                        <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Path=Comment}"></TextBlock>
                         <TextBlock>
                             <Run Text="{Binding Path=Comment}"/>
                             <Run Text="|"/>
@@ -183,8 +188,17 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
-        <StackPanel Grid.Row="11" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 0 0">
+
+        <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 5 0 0">
+            <Button Command="{Binding TaskImportButton}" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/import_icon.png" Height="25" Width="20"></Image>
+            </Button>
+            <Button Command="{Binding TaskExportButton}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
+                <Image Source="/Views/Assets/export_icon.png" Height="25" Width="20"></Image>
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="10" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 0 0">
             <Button Command="{Binding ListCategorieTaskListAddButton}" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
                 <Image Source="/Views/Assets/plus_icon.png" Height="20" Width="20"></Image>
             </Button>
@@ -196,7 +210,7 @@
             </Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="11" Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 0 0">
+        <StackPanel Grid.Row="10" Grid.Column="9" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 5 0 0">
             <Button Command="{Binding TaskAddButton}" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" Background="WhiteSmoke" Foreground="Gray" BorderThickness="0">
                 <Image Source="/Views/Assets/plus_icon.png" Height="20" Width="20"></Image>
             </Button>
@@ -207,7 +221,6 @@
                 <Image Source="/Views/Assets/pen_icon.png" Height="20" Width="20"></Image>
             </Button>
         </StackPanel>
-
 
     </Grid>
 </Window>

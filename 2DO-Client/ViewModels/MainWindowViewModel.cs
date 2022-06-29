@@ -25,7 +25,10 @@ namespace _2DO_Client.ViewModels
         public ICommand TaskDeleteButton { get; set; }
         public ICommand TaskEditButton { get; set; }
 
-        public ObservableCollection<ServiceReference1.Task> TaskModels { get; set; } = new ObservableCollection<ServiceReference1.Task>();
+        public ICommand TaskExportButton { get; set; }
+        public ICommand TaskImportButton { get; set; }
+
+		public ObservableCollection<ServiceReference1.Task> TaskModels { get; set; } = new ObservableCollection<ServiceReference1.Task>();
 
 		public ServiceReference1.Task SelectedItem { get; set; }
 

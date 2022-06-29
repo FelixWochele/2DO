@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure.Design;
 using _2DO_Client.ViewModels;
 using _2DO_Client.Views;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using _2DO_Client.Framework;
 using _2DO_Client.Service;
 using Autofac;
 using ServiceReference1;
 using Task = ServiceReference1.Task;
+using System.Xml.Serialization;
+using _2DO_Client.Controller.Mapping;
 
 namespace _2DO_Client.Controller
 {
@@ -58,6 +63,9 @@ namespace _2DO_Client.Controller
             mMainWindowViewModel.TaskDeleteButton = new RelayCommand(ExecuteTaskDeleteCommand, CanExecuteTaskDeleteDeleteCommand);
             mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand, CanExecuteTaskEditCommand);
 
+            mMainWindowViewModel.TaskExportButton = new RelayCommand(ExecuteTaskExportCommand, CanExecuteTaskExport);
+            mMainWindowViewModel.TaskImportButton = new RelayCommand(ExecuteTaskImportCommand);
+
             //Start WCF Service
             mServiceController = serviceController.mToDoService;
             var test = mServiceController.InitNHibernate();
@@ -70,6 +78,82 @@ namespace _2DO_Client.Controller
             
             //Execute Some Test Methods
             //AddTestDataToAllWindows();
+        }
+
+        private void ExecuteTaskImportCommand(object obj)
+        {
+            XMLExportMap importMap = new XMLExportMap();
+
+            //Deserialize employee
+            var serializer = new XmlSerializer(typeof(XMLExportMap));
+
+            if (!File.Exists(@"Export.xml"))
+            {
+                MessageBox.Show("Datei exisitiert nicht!", "2Do");
+            }
+            else
+            {
+                using (var stream = new FileStream(@"Export.xml", FileMode.Open))
+                {
+                    importMap = serializer.Deserialize(stream) as XMLExportMap;
+
+                }
+
+
+                importMap.TaskList.ID = 0;
+                mServiceController.AddTaskList(importMap.TaskList);
+
+                var taskWithId = mServiceController.GetAllTaskLists().Where(x =>
+                        (x.Comment == importMap.TaskList.Comment) && (x.Description == importMap.TaskList.Description))
+                    .FirstOrDefault();
+
+                foreach (var tasks in importMap.Tasks)
+                {
+                    tasks.ID = 0;
+                    tasks.TasklistID = taskWithId.ID;
+                    mServiceController.AddTask(tasks);
+                }
+
+                UpdateTaskListListFromDB();
+                UpdateTasksFromDB();
+
+
+            }
+        }
+
+        private void ExecuteTaskExportCommand(object obj)
+        {
+            var actualTaskList = areaListSelectorController.GetSelectedElement();
+
+            var tasks = mServiceController.GetAllTasks().Where(x => x.TasklistID == actualTaskList.ID).ToList();
+
+
+            var xmlObject = new XMLExportMap();
+            xmlObject.TaskList = actualTaskList;
+            xmlObject.Tasks = tasks;
+
+
+            if (File.Exists(@"Export.xml"))
+            {
+                MessageBox.Show("Datei existiert bereits!", "2Do");
+            }
+            else
+            {
+                //Deserialize employee
+                var serializer = new XmlSerializer(typeof(XMLExportMap));
+
+                using (var stream = new FileStream(@"Export.xml", FileMode.CreateNew))
+                {
+                    serializer.Serialize(stream, xmlObject);
+                }
+
+                MessageBox.Show("Exportiervorgang abgeschlossen!", "2Do");
+            }
+        }
+
+        private bool CanExecuteTaskExport(object arg)
+        {
+            return (areaListSelectorController.GetSelectedElement() != null); 
         }
 
         public void InitGetData()
@@ -100,16 +184,20 @@ namespace _2DO_Client.Controller
         //Category/TaskList
         private void ExecuteCategorieTaskListAddCommand(object obj)
         {
-
             if (ListIsActive)
             {
 
                 AddTaskListWindowController mAddTaskListWindowController =
                     mApplication.Container.Resolve<AddTaskListWindowController>();
 
-                mServiceController.AddTaskList(mAddTaskListWindowController.AddTaskList());
+                var tasklist = mAddTaskListWindowController.AddTaskList();
 
-                UpdateTaskListListFromDB();
+                if (tasklist != null)
+                {
+                    mServiceController.AddTaskList(tasklist);
+
+                    UpdateTaskListListFromDB();
+                }
 
                 /*
                 //If DB should not work
@@ -129,7 +217,16 @@ namespace _2DO_Client.Controller
 
                 var taskList = mAddCategorieWindowController.AddCategorie();
 
-                if (taskList != null)
+
+                var doubleName = mServiceController.GetAllCategories()
+                    .Where(x => x.Name.ToUpper().Equals(taskList.Name.ToUpper()))
+                    .FirstOrDefault();
+
+                if (doubleName != null)
+                {
+                    MessageBox.Show("Name ist bereits Vergeben!", "2Do");
+                }
+                else if (taskList != null)
                 {
                     mServiceController.AddCategorie(taskList);
 
@@ -165,6 +262,17 @@ namespace _2DO_Client.Controller
                     {
                         mServiceController.RemoveTask(task);
                     }
+
+                    var tasksID = tasks.Select(x => x.ID);
+
+                    var catRelations = mServiceController.GetAllCategoriesToTasks()
+                        .Where(x => tasksID.Contains(x.TaskID)).ToList();
+
+                    foreach (var catRelation in catRelations)
+                    {
+                        mServiceController.RemoveCategorieToTask(catRelation);
+                    }
+
                     UpdateTasksFromDB();
 
                     //areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
@@ -185,8 +293,6 @@ namespace _2DO_Client.Controller
                     {
                         mServiceController.RemoveCategorieToTask(task);
                     }
-
-                    //TODO: PRÜFEN
 
                     //areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
                     mServiceController.RemoveCategorie(areaCategorysSelectorController.GetSelectedElement());
@@ -249,9 +355,22 @@ namespace _2DO_Client.Controller
                 var catList = mServiceController.GetAllCategories()
                     .Where(x => x.ID == areaCategorysSelectorController.GetSelectedElement().ID).FirstOrDefault();
 
-                var newCatList = mAddCategorieWindowController.ChangeCategorie(catList);
+                var test = mAddCategorieWindowController.ChangeCategorie(catList);
 
-                mServiceController.AddCategorie(newCatList);
+                var doubleName = mServiceController.GetAllCategories()
+                    .Where(x => x.Name.ToUpper().Equals(test.Name.ToUpper()))
+                    .FirstOrDefault();
+
+                if (doubleName != null)
+                {
+                    MessageBox.Show("Name ist bereits Vergeben!", "2Do");
+                }
+                else if (test != null)
+                {
+                    var newCatList = mAddCategorieWindowController.ChangeCategorie(catList);
+
+                    mServiceController.AddCategorie(newCatList);
+                }
 
                 /*
                 var retTask = areaCategorysSelectorController.GetSelectedElement();
@@ -311,7 +430,10 @@ namespace _2DO_Client.Controller
                 ConnectTaskToCategorieWindowController mConnectTaskToCategorieWindowController =
                     mApplication.Container.Resolve<ConnectTaskToCategorieWindowController>();
 
-                var test = mServiceController.GetAllTasks().ToList();
+                var listOfCategoryRelationsIDs = mServiceController.GetAllCategoriesToTasks().Where(x =>
+                    x.CategoryID == areaCategorysSelectorController.GetSelectedElement().ID).Select(x => x.TaskID).ToList();
+
+                var test = mServiceController.GetAllTasks().Where(x => !listOfCategoryRelationsIDs.Contains(x.ID)).ToList();
 
                 mConnectTaskToCategorieWindowController.setList(test);
 

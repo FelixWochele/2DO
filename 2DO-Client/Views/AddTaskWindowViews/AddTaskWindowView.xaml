@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime" d:DataContext="{d:DesignInstance Type=local:AddTaskWindowViewModel}"
         mc:Ignorable="d"
         Background="WhiteSmoke"
-        Title="AddTaskWindowView" Height="350" Width="800">
+        Title="Aufgabe hinzufügen" Height="350" Width="800">
 
 
 
