@@ -180,9 +180,18 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <WrapPanel.Style>
+                            <Style TargetType="WrapPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding State}" Value="True">
+                                        <Setter Property="Background" Value="LightGreen"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </WrapPanel.Style>
                         <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Path=Comment}"></TextBlock>
-                        <TextBlock>
-                            <Run Text="{Binding Path=Comment}"/>
+                        <TextBlock TextWrapping="Wrap">
+                            <Run Text="{Binding Path=Description}"/>
                             <Run Text="|"/>
                             <Run Text="{Binding Path=CreationDate, StringFormat={}{0:dddd, MMMM dd}}"/> 
                             <Run Text=" - "/>

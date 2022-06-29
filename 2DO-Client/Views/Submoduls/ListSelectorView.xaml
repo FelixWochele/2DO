@@ -57,7 +57,7 @@
                     
                     <DataTemplate>
                         <WrapPanel Orientation="Vertical">
-                            <TextBlock FontWeight="Bold" Text="{Binding Path=Comment}" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock FontSize="15" FontWeight="Bold"  Text="{Binding Path=Comment}" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

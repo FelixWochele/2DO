@@ -31,7 +31,10 @@ namespace _2DO_Client.Controller
         private CategorieSelectorController areaCategorysSelectorController;
         private ListSelectorController areaListSelectorController;
 
-        private bool ListIsActive; 
+        private bool ListIsActive;
+        private bool ListBtnActive = true;
+        private bool CategoryBtnActive = true;
+
 
         public void Initialize()
         {
@@ -72,8 +75,8 @@ namespace _2DO_Client.Controller
             areaListSelectorController.Initialize();
             areaListSelectorController.setInstance(this);
 
-            mMainWindowViewModel.ShowCategorieSelectorCommand = new RelayCommand(ExecuteCategorieSelectorCommand);
-            mMainWindowViewModel.ShowListSelectorCommand = new RelayCommand(ExecuteListSelectorCommand);
+            mMainWindowViewModel.ShowCategorieSelectorCommand = new RelayCommand(ExecuteCategorieSelectorCommand, CanCategoryCommandExecuted);
+            mMainWindowViewModel.ShowListSelectorCommand = new RelayCommand(ExecuteListSelectorCommand, CanListCommandExecuted);
 
             mMainWindowViewModel.ListCategorieTaskListAddButton = new RelayCommand(ExecuteCategorieTaskListAddCommand);
             mMainWindowViewModel.ListCategorieTaskListDeleteButton = new RelayCommand(ExecuteCategorieTaskListDeleteCommand);
@@ -152,6 +155,8 @@ namespace _2DO_Client.Controller
             ListIsActive = false;
             mMainWindowViewModel.ActiveViewModel = areaCategorysSelectorController.Initialize();
             areaListSelectorController.ResteSelectedItem();
+            ListBtnActive = true;
+            CategoryBtnActive = false;
         }
 
         private void ExecuteListSelectorCommand(object obj)
@@ -159,6 +164,17 @@ namespace _2DO_Client.Controller
             ListIsActive = true;
             mMainWindowViewModel.ActiveViewModel = areaListSelectorController.Initialize();
             areaListSelectorController.ResteSelectedItem();
+            ListBtnActive = false;
+            CategoryBtnActive = true;
+        }
+
+        private bool CanListCommandExecuted(object obj)
+        {
+            return !ListIsActive;
+        }
+        private bool CanCategoryCommandExecuted(object obj)
+        {
+            return ListIsActive;
         }
 
         //Category/TaskList
@@ -223,12 +239,12 @@ namespace _2DO_Client.Controller
 
         private bool TaskListIO(TaskList taskList)
         {
-            return (taskList.Comment != null) && (taskList.Description != null);
+            return (taskList != null) && (taskList.Comment != null) && (taskList.Description != null);
         }
 
         private bool CategoryIO(Categorie categorie)
         {
-            return (categorie.Name != null);
+            return (categorie != null) && (categorie.Name != null);
         }
 
         private void ExecuteCategorieTaskListDeleteCommand(object obj)
@@ -457,6 +473,7 @@ namespace _2DO_Client.Controller
                 var toDelete = tasksFromCat.Where(X => X.TaskID == mMainWindowViewModel.SelectedItem.ID).FirstOrDefault();
 
                 mServiceController.RemoveCategorieToTask(toDelete);
+                UpdateTasksFromDB();
             }
         }
 
@@ -514,31 +531,40 @@ namespace _2DO_Client.Controller
             }
             else
             {
-                using (var stream = new FileStream(filename, FileMode.Open))
+                try
                 {
-                    importMap = serializer.Deserialize(stream) as XMLExportMap;
+                    using (var stream = new FileStream(filename, FileMode.Open))
+                    {
+                        importMap = serializer.Deserialize(stream) as XMLExportMap;
 
+                    }
+
+
+                    importMap.TaskList.ID = 0;
+                    mServiceController.AddTaskList(importMap.TaskList);
+
+                    var taskWithId = mServiceController.GetAllTaskLists().Where(x =>
+                            (x.Comment == importMap.TaskList.Comment) && (x.Description == importMap.TaskList.Description))
+                        .FirstOrDefault();
+
+                    foreach (var tasks in importMap.Tasks)
+                    {
+                        tasks.ID = 0;
+                        tasks.TasklistID = taskWithId.ID;
+                        mServiceController.AddTask(tasks);
+                    }
+
+                    UpdateTaskListListFromDB();
+                    UpdateTasksFromDB();
                 }
-
-
-                importMap.TaskList.ID = 0;
-                mServiceController.AddTaskList(importMap.TaskList);
-
-                var taskWithId = mServiceController.GetAllTaskLists().Where(x =>
-                        (x.Comment == importMap.TaskList.Comment) && (x.Description == importMap.TaskList.Description))
-                    .FirstOrDefault();
-
-                foreach (var tasks in importMap.Tasks)
+                catch (Exception e)
                 {
-                    tasks.ID = 0;
-                    tasks.TasklistID = taskWithId.ID;
-                    mServiceController.AddTask(tasks);
+                    Console.WriteLine(e);
+                    if (filename != null)
+                        MessageBox.Show("Es ist ein Fehler Aufgetreten.\n" +
+                                        "Bitte überprüfen Sie die ausgewählte Datei oder versuchen Sie es mit einer anderen Datei.", "2Do - Warnung");
+                    
                 }
-
-                UpdateTaskListListFromDB();
-                UpdateTasksFromDB();
-
-
             }
         }
 

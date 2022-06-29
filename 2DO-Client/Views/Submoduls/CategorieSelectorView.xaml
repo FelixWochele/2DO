@@ -62,7 +62,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel Orientation="Vertical" VerticalAlignment="Top">
-                            <TextBlock FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock FontSize="15" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
