@@ -31,7 +31,7 @@
     <XsdCodeGenGenerateInternalTypes>False</XsdCodeGenGenerateInternalTypes>
     <XsdCodeGenEnableDataBinding>False</XsdCodeGenEnableDataBinding>
     <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
-    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+    <CopySQLiteInteropFiles>true</CopySQLiteInteropFiles>
     <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>

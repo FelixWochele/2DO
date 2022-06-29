@@ -352,7 +352,7 @@ namespace _2DO_Client.Controller
 
         #endregion
 
-            #region DB Operations
+        #region DB Operations
 
             private void UpdateTaskListListFromDB()
         {
