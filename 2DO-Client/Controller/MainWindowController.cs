@@ -54,8 +54,8 @@ namespace _2DO_Client.Controller
             mMainWindowViewModel.ListCategorieTaskListDeleteButton = new RelayCommand(ExecuteCategorieTaskListDeleteCommand);
             mMainWindowViewModel.ListCategorieTaskListEditButton = new RelayCommand(ExecuteCategorieTaskListEditCommand);
 
-            mMainWindowViewModel.TaskAddButton = new RelayCommand(ExecuteTaskAddCommand, CanExecuteTaskAddDeleteCommand);
-            mMainWindowViewModel.TaskDeleteButton = new RelayCommand(ExecuteTaskDeleteCommand, CanExecuteTaskDeleteCommand);
+            mMainWindowViewModel.TaskAddButton = new RelayCommand(ExecuteTaskAddCommand, CanExecuteTaskAddCommand);
+            mMainWindowViewModel.TaskDeleteButton = new RelayCommand(ExecuteTaskDeleteCommand, CanExecuteTaskDeleteDeleteCommand);
             mMainWindowViewModel.TaskEditButton = new RelayCommand(ExecuteTaskEditCommand, CanExecuteTaskEditCommand);
 
             //Start WCF Service
@@ -301,9 +301,9 @@ namespace _2DO_Client.Controller
                 mConnectTaskToCategorieWindowController.Test();
             }
         }
-        private bool CanExecuteTaskAddDeleteCommand(object obj)
+        private bool CanExecuteTaskAddCommand(object obj)
         {
-            return (areaListSelectorController.GetSelectedElement() != null) || (mMainWindowViewModel.SelectedItem != null);
+            return (areaCategorysSelectorController.GetSelectedElement() != null) || (areaListSelectorController.GetSelectedElement()!= null);
         }
 
         private void ExecuteTaskDeleteCommand(object obj)
@@ -316,9 +316,9 @@ namespace _2DO_Client.Controller
             }
         }
 
-        private bool CanExecuteTaskDeleteCommand(object obj)
+        private bool CanExecuteTaskDeleteDeleteCommand(object obj)
         {
-            return (mMainWindowViewModel.SelectedItem != null);
+            return (areaCategorysSelectorController.GetSelectedElement() != null) || (areaListSelectorController.GetSelectedElement() != null);
         }
 
         private void ExecuteTaskEditCommand(object obj)
