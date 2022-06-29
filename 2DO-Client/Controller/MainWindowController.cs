@@ -298,7 +298,12 @@ namespace _2DO_Client.Controller
                 ConnectTaskToCategorieWindowController mConnectTaskToCategorieWindowController =
                     mApplication.Container.Resolve<ConnectTaskToCategorieWindowController>();
 
+                var test = mServiceController.GetAllTasks().ToList();
+
+                mConnectTaskToCategorieWindowController.setList(test);
+
                 mConnectTaskToCategorieWindowController.Test();
+
             }
         }
         private bool CanExecuteTaskAddCommand(object obj)

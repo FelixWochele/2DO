@@ -54,5 +54,14 @@ namespace _2DO_Client.Controller
             return null;
         }
 
+        public void setList(List<ServiceReference1.Task> inList)
+        {
+            mViewModel.TaskModels.Clear();
+
+            foreach (var task in inList)
+            {
+                mViewModel.TaskModels.Add(task);
+            }
+        }
     }
 }

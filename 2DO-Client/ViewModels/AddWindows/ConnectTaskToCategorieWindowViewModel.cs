@@ -19,7 +19,7 @@ namespace _2DO_Client.ViewModels.AddWindows
 
         public ICommand CancelCommand { get; set; }
 
-        public ObservableCollection<ServiceReference1.Task> CategorieModels { get; set; } = new();
+        public ObservableCollection<ServiceReference1.Task> TaskModels { get; set; } = new();
 
         private Task mSelectedItem;
 
