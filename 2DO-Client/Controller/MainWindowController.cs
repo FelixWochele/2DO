@@ -100,6 +100,7 @@ namespace _2DO_Client.Controller
         //Category/TaskList
         private void ExecuteCategorieTaskListAddCommand(object obj)
         {
+
             if (ListIsActive)
             {
 
@@ -297,6 +298,7 @@ namespace _2DO_Client.Controller
                 ConnectTaskToCategorieWindowController mConnectTaskToCategorieWindowController =
                     mApplication.Container.Resolve<ConnectTaskToCategorieWindowController>();
 
+                mConnectTaskToCategorieWindowController.Test();
             }
         }
         private bool CanExecuteTaskAddDeleteCommand(object obj)
@@ -369,6 +371,8 @@ namespace _2DO_Client.Controller
 
         private void UpdateCategoriesFromDB()
         {
+            areaCategorysSelectorController.ResetModelList();
+
             var allCategories = mServiceController.GetAllCategories();
 
             foreach (var category in allCategories)
