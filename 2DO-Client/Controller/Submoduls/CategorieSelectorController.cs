@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,25 @@ namespace _2DO_Client.Controller
     public class CategorieSelectorController : SubmoduleControler
     {
         private CategorieSelectorViewModel mViewModel;
+        private CategorieSelectorView mView;
+
+        private MainWindowController mMainController;
+
+        public CategorieSelectorController()
+        {
+            mViewModel = new();
+            mView = new();
+
+            mView.DataContext = mViewModel;
+
+            mViewModel.PropertyChanged += _viewModel_PropertyChanged;
+        }
+
+        public void setInstance(MainWindowController mainController)
+        {
+            mMainController = mainController;
+        }
+
 
         public override ViewModelBase Initialize()
         {
@@ -43,6 +63,19 @@ namespace _2DO_Client.Controller
         public void ResetModelList()
         {
             mViewModel.CategorieModels.Clear();
+        }
+
+        private void _viewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CategorieSelectorViewModel.SelectedItem))
+            {
+                mMainController.SelectCmd(new object());
+            }
+        }
+
+        public void ResteSelectedItem()
+        {
+            mViewModel.SelectedItem = null;
         }
     }
 }

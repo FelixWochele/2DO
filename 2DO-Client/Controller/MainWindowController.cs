@@ -42,8 +42,10 @@ namespace _2DO_Client.Controller
 
             areaCategorysSelectorController = mApplication.Container.Resolve<CategorieSelectorController>();
             areaCategorysSelectorController.Initialize();
+            areaCategorysSelectorController.setInstance(this);
             areaListSelectorController = mApplication.Container.Resolve<ListSelectorController>();
             areaListSelectorController.Initialize();
+            areaListSelectorController.setInstance(this);
 
             mMainWindowViewModel.ShowCategorieSelectorCommand = new RelayCommand(ExecuteCategorieSelectorCommand);
             mMainWindowViewModel.ShowListSelectorCommand = new RelayCommand(ExecuteListSelectorCommand);
@@ -58,11 +60,11 @@ namespace _2DO_Client.Controller
 
             mMainWindowViewModel.Select = new RelayCommand(SelectCmd);
 
-            //Init Submodule -> List
-            ExecuteListSelectorCommand(new object());
-
             //Start WCF Service
             mServiceController = serviceController.mToDoService;
+
+            //Init Submodule -> List
+            ExecuteListSelectorCommand(new object());
 
             var test = mServiceController.InitNHibernate();
             Trace.WriteLine(test);
@@ -84,26 +86,20 @@ namespace _2DO_Client.Controller
             UpdateTasksFromDB();
         }
 
-
-        private void SelectCmd(object obj)
-        {
-            UpdateTasksFromDB();
-        }
-
-
         #region Command Category/TaskList
-
         //Submoduls
         private void ExecuteCategorieSelectorCommand(object obj)
         {
             ListIsActive = false;
             mMainWindowViewModel.ActiveViewModel = areaCategorysSelectorController.Initialize();
+            areaListSelectorController.ResteSelectedItem();
         }
 
         private void ExecuteListSelectorCommand(object obj)
         {
             ListIsActive = true;
             mMainWindowViewModel.ActiveViewModel = areaListSelectorController.Initialize();
+            areaListSelectorController.ResteSelectedItem();
         }
 
         //Category/TaskList
@@ -264,6 +260,12 @@ namespace _2DO_Client.Controller
                 */
             }
         }
+        //If TaskList selection is changed
+        public void SelectCmd(object obj)
+        {
+            UpdateTasksFromDB();
+        }
+
         #endregion
 
         #region Commands Tasks

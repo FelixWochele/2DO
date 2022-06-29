@@ -21,6 +21,8 @@ namespace _2DO_Client.Controller
         private ListSelectorViewModel mViewModel;
         private ListSelectorView mView;
 
+        private MainWindowController mMainController;
+
         public ListSelectorController()
         {
             mViewModel = new();
@@ -28,9 +30,12 @@ namespace _2DO_Client.Controller
 
             mView.DataContext = mViewModel;
 
-            mViewModel.DoubleClick = new RelayCommand(Double_Click);
+            mViewModel.PropertyChanged += _viewModel_PropertyChanged;
         }
-        
+        public void setInstance(MainWindowController mainController)
+        {
+            mMainController = mainController;
+        }
 
         public override ViewModelBase Initialize()
         {
@@ -57,9 +62,16 @@ namespace _2DO_Client.Controller
             mViewModel.TaskListModels.Clear();
         }
 
-        public void Double_Click(object obj)
+        private void _viewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            Trace.WriteLine("kjhsadflkjshdfkjhasdfkjhasdfjkhasdflkhjasdfhjkasdjkfhaskljdfhklasdjhf");
+            if (e.PropertyName == nameof(ListSelectorViewModel.SelectedItem))
+            {
+                mMainController.SelectCmd(new object());
+            }
+        }
+        public void ResteSelectedItem()
+        {
+            mViewModel.SelectedItem = null;
         }
 
     }
