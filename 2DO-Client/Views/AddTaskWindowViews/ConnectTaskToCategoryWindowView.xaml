@@ -5,8 +5,98 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2DO_Client.Views.AddTaskWindowViews"
         mc:Ignorable="d"
-        Title="ConnectTaskToCategoryWindowView" Height="450" Width="800">
+        Title="ConnectTaskToCategoryWindowView" Height="450" Width="450">
+
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#cccccc"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="DarkGray"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#a2a7a9"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyleListSelector" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <ListBox Style="{DynamicResource MainListBoxStyle}" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding TaskModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Margin="10 10 10 10">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <TextBlock FontWeight="Bold" Text="{Binding Path=Comment}"></TextBlock>
+                        <TextBlock>
+                            <Run Text="{Binding Path=Comment}"/>
+                            <Run Text="|"/>
+                            <Run Text="{Binding Path=CreationDate, StringFormat={}{0:dddd, MMMM dd}}"/> 
+                            <Run Text=" - "/>
+                            <Run Text="{Binding Path=DueDate, StringFormat={}{0:dddd, MMMM dd}}"/>
+                            <Run Text="|"/>
+                            <Run Text="{Binding Path=State}"/>
+                        </TextBlock>
+                    </WrapPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button Style="{DynamicResource ButtonStyleListSelector}" Command="{Binding OkCommand}" Background="#cccccc" Foreground="Black" BorderThickness="0" Width="120" Margin="10 10 10 10">Ok</Button>
+            <Button Style="{DynamicResource ButtonStyleListSelector}" Command="{Binding CancelCommand}" Background="#cccccc" BorderThickness="0" Foreground="Black" Width="120" Margin="10 10 10 10">Abbrechen</Button>
+        </StackPanel>
     </Grid>
+
 </Window>
