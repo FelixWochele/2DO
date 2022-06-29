@@ -145,6 +145,7 @@ namespace _2DO_Client.Controller
         #endregion
 
         #region Command Category/TaskList
+
         //Submoduls
         private void ExecuteCategorieSelectorCommand(object obj)
         {
@@ -171,58 +172,63 @@ namespace _2DO_Client.Controller
 
                 var tasklist = mAddTaskListWindowController.AddTaskList();
 
-                if (tasklist != null)
+                if(TaskListIO(tasklist))
                 {
-                    mServiceController.AddTaskList(tasklist);
+                    if (tasklist != null)
+                    {
+                        mServiceController.AddTaskList(tasklist);
 
-                    UpdateTaskListListFromDB();
+                        UpdateTaskListListFromDB();
+                    }
                 }
-
-                /*
-                //If DB should not work
-
-                var retTask = mAddTaskListWindowController.AddTaskList();
-
-                if (retTask != null)
+                else 
                 {
-                    areaListSelectorController.AddElement(retTask);
+                    MessageBox.Show("Flasche Eingabe!\n" +
+                                    "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
                 }
-                */
             }
             else
             {
                 AddCategorieWindowController mAddCategorieWindowController =
                     mApplication.Container.Resolve<AddCategorieWindowController>();
 
-                var taskList = mAddCategorieWindowController.AddCategorie();
+                var category = mAddCategorieWindowController.AddCategorie();
 
 
                 var doubleName = mServiceController.GetAllCategories()
-                    .Where(x => x.Name.ToUpper().Equals(taskList.Name.ToUpper()))
+                    .Where(x => x.Name.ToUpper().Equals(category.Name.ToUpper()))
                     .FirstOrDefault();
 
                 if (doubleName != null)
                 {
                     MessageBox.Show("Name ist bereits Vergeben!", "2Do");
                 }
-                else if (taskList != null)
+                else if (category != null)
                 {
-                    mServiceController.AddCategorie(taskList);
+                    if (CategoryIO(category))
+                    {
+                        mServiceController.AddCategorie(category);
 
-                    UpdateCategoriesFromDB();
+                        UpdateCategoriesFromDB();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Flasche Eingabe!\n" +
+                                        "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
+
+                    }
                 }
-                
-                /*
-                //If DB should not Work
-
-                var retTask = mAddCategorieWindowController.AddCategorie();
-
-                if (retTask != null)
-                {
-                    areaCategorysSelectorController.AddElement(retTask);
-                }
-                */
             }
+        }
+
+        private bool TaskListIO(TaskList taskList)
+        {
+            return (taskList.Comment != null) && (taskList.Description != null);
+        }
+
+        private bool CategoryIO(Categorie categorie)
+        {
+            return (categorie.Name != null);
         }
 
         private void ExecuteCategorieTaskListDeleteCommand(object obj)
@@ -254,7 +260,6 @@ namespace _2DO_Client.Controller
 
                     UpdateTasksFromDB();
 
-                    //areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
                     mServiceController.RemoveLTaskist(areaListSelectorController.GetSelectedElement());
                     UpdateTaskListListFromDB();
                 }
@@ -268,14 +273,23 @@ namespace _2DO_Client.Controller
                     var tasks = mServiceController.GetAllCategoriesToTasks()
                         .Where(x => x.CategoryID == tempEle.ID).ToList();
 
-                    foreach (var task in tasks)
+                    if (tasks.Count == 0)
                     {
-                        mServiceController.RemoveCategorieToTask(task);
-                    }
+                        //Eigentlich unnötig :D
+                        foreach (var task in tasks)
+                        {
+                            mServiceController.RemoveCategorieToTask(task);
+                        }
 
-                    //areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
-                    mServiceController.RemoveCategorie(areaCategorysSelectorController.GetSelectedElement());
-                    UpdateCategoriesFromDB();
+                        mServiceController.RemoveCategorie(areaCategorysSelectorController.GetSelectedElement());
+                        UpdateCategoriesFromDB();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Es sind noch Aufgabe in der Kategorie!\n" +
+                                        "Achten Sie darauf, dass Sie erst alle Aufgabe der Kategorie löschen.", "Do2 - Error");
+                    }
+                    
                 }
             }
         }
@@ -312,18 +326,6 @@ namespace _2DO_Client.Controller
 
                     UpdateTaskListListFromDB();
                 }
-
-                /*
-                var retTask = areaListSelectorController.GetSelectedElement();
-
-                mAddTaskListWindowController.ChangeTaskList(retTask);
-
-                if (retTask != null)
-                {
-                    areaListSelectorController.RemoveElement(areaListSelectorController.GetSelectedElement());
-                    areaListSelectorController.AddElement(retTask);
-                }
-                */
             }
             else
             {
@@ -350,18 +352,6 @@ namespace _2DO_Client.Controller
 
                     mServiceController.AddCategorie(newCatList);
                 }
-
-                /*
-                var retTask = areaCategorysSelectorController.GetSelectedElement();
-
-                mAddCategorieWindowController.ChangeCategorie(retTask);
-
-                if (retTask != null)
-                {
-                    areaCategorysSelectorController.RemoveElement(areaCategorysSelectorController.GetSelectedElement());
-                    areaCategorysSelectorController.AddElement(retTask);
-                }
-                */
             }
         }
         //If TaskList selection is changed
@@ -385,23 +375,23 @@ namespace _2DO_Client.Controller
                 // Foreign Key
                 var task = mAddTaskWindowController.AddTask();
 
-                if (task != null)
+                if(TaskIO(task))
                 {
-                    task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
+                    if (task != null)
+                    {
+                        task.TasklistID = areaListSelectorController.GetSelectedElement().ID;
 
-                    mServiceController.AddTask(task);
+                        mServiceController.AddTask(task);
 
-                    UpdateTasksFromDB();
+                        UpdateTasksFromDB();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Flasche Eingabe!\n" +
+                                    "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
                 }
 
-                /*
-                var retTask = mAddTaskWindowController.AddTask();
-
-                if (retTask != null)
-                {
-                    mMainWindowViewModel.TaskModels.Add(retTask);
-                }
-                */
             }
             else if (areaCategorysSelectorController.GetSelectedElement() != null)
             {
@@ -418,30 +408,43 @@ namespace _2DO_Client.Controller
 
                 var task = mConnectTaskToCategorieWindowController.Test();
 
-                if (task != null)
+                if(TaskIO(task))
                 {
-                    var relationA = new ServiceReference1.TaskToCategorieRelations();
+                    if (task != null)
+                    {
+                        var relationA = new ServiceReference1.TaskToCategorieRelations();
 
-                    relationA.CategoryID = areaCategorysSelectorController.GetSelectedElement().ID;
-                    relationA.TaskID = task.ID;
+                        relationA.CategoryID = areaCategorysSelectorController.GetSelectedElement().ID;
+                        relationA.TaskID = task.ID;
 
-                    mServiceController.AddCategorieToTask(relationA);
+                        mServiceController.AddCategorieToTask(relationA);
 
-                    UpdateTasksFromDB();
+                        UpdateTasksFromDB();
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("Flasche Eingabe!\n" +
+                                    "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
+                }
+                
             }
         }
+
         private bool CanExecuteTaskAddCommand(object obj)
         {
             return (areaCategorysSelectorController.GetSelectedElement() != null) || (areaListSelectorController.GetSelectedElement()!= null);
+        }
+
+        private bool TaskIO(ServiceReference1.Task task)
+        {
+            return (task != null) && (task.Comment != null) && (task.Description != null) && (task.Priority != null) && (task.State != null) && (task.DueDate != null) && (task.CreationDate != null);
         }
 
         private void ExecuteTaskDeleteCommand(object obj)
         {
             if (areaListSelectorController.GetSelectedElement() != null && mMainWindowViewModel.SelectedItem != null)
             {
-                
-                //mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
                 mServiceController.RemoveTask(mMainWindowViewModel.SelectedItem);
                 UpdateTasksFromDB();
                 
@@ -472,7 +475,7 @@ namespace _2DO_Client.Controller
 
             var newtask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
 
-            if (newtask != null)
+            if (newtask != null && TaskIO(newtask))
             {
                 task = newtask;
 
@@ -480,16 +483,6 @@ namespace _2DO_Client.Controller
 
                 UpdateTasksFromDB();
             }
-
-            /*
-            var retTask = mAddTaskWindowController.ChangeTask(mMainWindowViewModel.SelectedItem);
-
-            if (retTask != null)
-            {
-                mMainWindowViewModel.TaskModels.Remove(mMainWindowViewModel.SelectedItem);
-                mMainWindowViewModel.TaskModels.Add(retTask);
-            }
-            */
         }
 
         private bool CanExecuteTaskEditCommand(object obj)

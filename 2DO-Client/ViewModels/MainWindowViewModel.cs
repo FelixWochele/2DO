@@ -36,6 +36,7 @@ namespace _2DO_Client.ViewModels
 
         public MainWindowViewModel()
         {
+            //Set standard values
             SortSelector.Add("-");
             SortSelector.Add("Anlagedatum");
             SortSelector.Add("Alphabetisch");

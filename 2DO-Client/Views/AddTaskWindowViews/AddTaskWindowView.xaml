@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime" d:DataContext="{d:DesignInstance Type=local:AddTaskWindowViewModel}"
         mc:Ignorable="d"
         Background="WhiteSmoke"
-        Title="Aufgabe hinzufügen" Height="350" Width="800">
+        Title="Aufgabe hinzufügen" Height="400" Width="800">
 
 
 
@@ -77,7 +77,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition MinHeight="70"/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -89,7 +89,7 @@
         <TextBox Grid.Row="0" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center" Text="{Binding Comment}"/>
 
         <Label Grid.Row="1" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Kommentar:"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center" Text="{Binding Description}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center" Text="{Binding Description}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
 
         <Label Grid.Row="2" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Daten:"/>
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">

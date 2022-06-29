@@ -24,14 +24,13 @@ namespace _2DO_Client.ViewModels
 
         public AddTaskWindowViewModel()
         {
+            //Set standard values
             ReminderMinutesSelector.Add("-");
             ReminderMinutesSelector.Add("Bei Erinnerung");
             ReminderMinutesSelector.Add("5 Minuten vorher");
             ReminderMinutesSelector.Add("10 Minuten vorher");
             ReminderMinutesSelector.Add("1 Stunde vorher");
             ReminderMinutesSelector.Add("12 Stunden vorher");
-            //ReminderMinutesSelector.Add("1 Tag vorher");
-            //ReminderMinutesSelector.Add("2 Tage vorher");
 
             PrioritySelector.Add("-");
             PrioritySelector.Add("25%");
@@ -41,6 +40,7 @@ namespace _2DO_Client.ViewModels
 
             CreationDate = DateTime.Now;
             DueDate = DateTime.Now + TimeSpan.FromDays(2);
+            Model.Priority = 50;
         }
 
         public int Version
@@ -62,7 +62,6 @@ namespace _2DO_Client.ViewModels
                 OnPropertyChanged();
             }
         }
-
 
         public string Comment
         {
@@ -169,11 +168,11 @@ namespace _2DO_Client.ViewModels
         {
             switch (val)
             {
-                case "50%":
+                case "0%":
                     return 0;
                 case "25%":
                     return 25;
-                case "0%":
+                case "50%":
                     return 50;
                 case "75%":
                     return 75;
@@ -188,11 +187,11 @@ namespace _2DO_Client.ViewModels
             switch (val)
             {
                 case 0:
-                    return "50%";
+                    return "0%";
                 case 25:
                     return "25%";
                 case 50:
-                    return "0%";
+                    return "50%";
                 case 75:
                     return "75%";
                 case 100:
