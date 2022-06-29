@@ -30,6 +30,10 @@
     <XsdCodeGenGenerateSerializableTypes>True</XsdCodeGenGenerateSerializableTypes>
     <XsdCodeGenGenerateInternalTypes>False</XsdCodeGenGenerateInternalTypes>
     <XsdCodeGenEnableDataBinding>False</XsdCodeGenEnableDataBinding>
+    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+    <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
+    <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
