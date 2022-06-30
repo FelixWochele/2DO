@@ -26,6 +26,7 @@
     <None Remove="Views\Assets\minus_icon.png" />
     <None Remove="Views\Assets\pen_icon.png" />
     <None Remove="Views\Assets\plus_icon.png" />
+    <None Remove="Views\Assets\splash_screen.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +65,12 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SplashScreen Include="Views\Assets\splash_screen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </SplashScreen>
   </ItemGroup>
 
 </Project>
