@@ -59,7 +59,6 @@
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.116" />
-    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.116" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
