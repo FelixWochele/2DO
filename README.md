@@ -7,7 +7,7 @@
 
 ## Dokumentation
 
-[Hier gehts zu den Dokumentationen!](/INF2020 Klausurersatzleistung.pdf)
+[Hier gehts zu den Dokumentationen!](https://github.com/FelixWochele/2DO/blob/master/Dokumentation - Wochele Felix - TInf2020.pdf)
 
 
 ## Bei Problemen:
