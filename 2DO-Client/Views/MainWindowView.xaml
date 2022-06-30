@@ -175,7 +175,7 @@
             </ContentControl.Resources>
         </ContentControl>
 
-        <ListBox Style="{DynamicResource MainListBoxStyle}" Grid.Row="3" Grid.Column="4" Grid.RowSpan="7" Grid.ColumnSpan="6" ItemsSource="{Binding TaskModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray">
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Style="{DynamicResource MainListBoxStyle}" Grid.Row="3" Grid.Column="4" Grid.RowSpan="7" Grid.ColumnSpan="6" ItemsSource="{Binding TaskModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray">
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -197,7 +197,7 @@
                             <Run Text=" - "/>
                             <Run Text="{Binding Path=DueDate, StringFormat={}{0:dddd, MMMM dd}}"/>
                             <Run Text="|"/>
-                            <Run Text="{Binding Path=State}"/>
+                            <Run Text="{Binding Path=Priority}"/>
                         </TextBlock>
                     </WrapPanel>
                 </DataTemplate>

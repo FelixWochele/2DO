@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:_2DO_Client.Views"
              xmlns:viewModels="clr-namespace:_2DO_Client.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:ListSelectorViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="200"
+             Width="{Binding ActualHeight, ElementName=parentElementName}" Height="{Binding ActualHeight, ElementName=parentElementName}"
              Background="White" Foreground="Azure">
     <UserControl.Resources>
         <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF"/>
@@ -52,12 +52,15 @@
     </UserControl.Resources>
     <Grid>
         <StackPanel>
-            <ListBox Name="ListBox" Style="{DynamicResource ListSelectorListBoxStyle}" ItemsSource="{Binding TaskListModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Height="390">
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="ListBox" Style="{DynamicResource ListSelectorListBoxStyle}" ItemsSource="{Binding TaskListModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Height="350">
                 <ListBox.ItemTemplate>
                     
                     <DataTemplate>
-                        <WrapPanel Orientation="Vertical">
-                            <TextBlock FontSize="15" FontWeight="Bold"  Text="{Binding Path=Comment}" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        <WrapPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Left" FontSize="15" FontWeight="Bold"  Text="{Binding Path=Comment}" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock TextWrapping="Wrap">
+                                <Run Text="{Binding Path=Description}"/>
+                            </TextBlock>
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

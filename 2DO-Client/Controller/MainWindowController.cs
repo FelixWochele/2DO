@@ -215,29 +215,36 @@ namespace _2DO_Client.Controller
 
                 var category = mAddCategorieWindowController.AddCategorie();
 
-
-                var doubleName = mServiceController.GetAllCategories()
-                    .Where(x => x.Name.ToUpper().Equals(category.Name.ToUpper()))
-                    .FirstOrDefault();
-
-                if (doubleName != null)
+                if (CategoryIO(category))
                 {
-                    MessageBox.Show("Name ist bereits Vergeben!", "2Do");
+                    var doubleName = mServiceController.GetAllCategories()
+                        .Where(x => x.Name.ToUpper().Equals(category.Name.ToUpper()))
+                        .FirstOrDefault();
+
+                    if (doubleName != null)
+                    {
+                        MessageBox.Show("Name ist bereits Vergeben!", "2Do");
+                    }
+                    else if (category != null)
+                    {
+                        if (CategoryIO(category))
+                        {
+                            mServiceController.AddCategorie(category);
+
+                            UpdateCategoriesFromDB();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Flasche Eingabe!\n" +
+                                            "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
+
+                        }
+                    }
                 }
-                else if (category != null)
+                else
                 {
-                    if (CategoryIO(category))
-                    {
-                        mServiceController.AddCategorie(category);
-
-                        UpdateCategoriesFromDB();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Flasche Eingabe!\n" +
-                                        "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
-
-                    }
+                    MessageBox.Show("Flasche Eingabe!\n" +
+                                    "Achten Sie darauf, dass Sie alle Felder ausgefüllt haben.", "Do2 - Error");
                 }
             }
         }

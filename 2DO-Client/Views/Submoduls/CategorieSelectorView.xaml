@@ -58,7 +58,7 @@
 
 
         <StackPanel>
-            <ListBox Style="{DynamicResource CategorieSelectorListBoxStyle1}" ItemsSource="{Binding CategorieModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Height="400">
+            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" Style="{DynamicResource CategorieSelectorListBoxStyle1}" ItemsSource="{Binding CategorieModels}" SelectedItem="{Binding SelectedItem}" Background="White" Foreground="Gray" Height="350">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel Orientation="Vertical" VerticalAlignment="Top">
