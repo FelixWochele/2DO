@@ -12,7 +12,6 @@ namespace _2DO_Client.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
 
-
         private ViewModelBase mActiveViewModel;
 
         public ICommand ShowListSelectorCommand { get; set; }

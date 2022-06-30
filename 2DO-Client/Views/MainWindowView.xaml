@@ -159,7 +159,7 @@
             </StackPanel>
         </Button>
 
-        <Label Grid.Row="2" Grid.Column="6"  Grid.ColumnSpan="2" FontSize="15" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Sortieren nach:"/>
+        <Label Grid.Row="2" Grid.Column="6"  Grid.ColumnSpan="2" FontSize="15" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="sortieren nach:"/>
         <ComboBox ItemsSource="{Binding SortSelector}" SelectedItem="{Binding SortSelect}" Text="{Binding SortSelect}" Grid.Row="2" Grid.Column="8" Grid.ColumnSpan="2" Height="30" Margin="10 10 20 10" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
 
 

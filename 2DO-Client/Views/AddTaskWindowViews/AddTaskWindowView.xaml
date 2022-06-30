@@ -98,10 +98,10 @@
             <DatePicker SelectedDate="{Binding DueDate}" VerticalAlignment="Center" Margin="10 0 0 0" Width="250"/>
         </StackPanel>
 
-        <Label Grid.Row="3" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Reminder:"/>
+        <Label Grid.Row="3" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Erinnerung:"/>
         <ComboBox ItemsSource="{Binding ReminderMinutesSelector}" SelectedItem="{Binding ReminderMinutes}" Text="{Binding ReminderMinutes}" Grid.Row="3" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center"/>
 
-        <Label Grid.Row="4" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Priority:"/>
+        <Label Grid.Row="4" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Wichtigkeit:"/>
         <ComboBox ItemsSource="{Binding PrioritySelector}" SelectedItem="{Binding Priority}" Text="{Binding Priority}" Grid.Row="4" Grid.Column="1" Margin="20 10 20 10" VerticalContentAlignment="Center"/>
 
         <Label Grid.Row="5" Grid.Column="0"  HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Status:"/>

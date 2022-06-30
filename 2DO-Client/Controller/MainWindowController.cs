@@ -66,6 +66,7 @@ namespace _2DO_Client.Controller
             //AddTestDataToAllWindows();
         }
 
+        #region Init
         public void IntiButtonsAndViews()
         {
             areaCategorysSelectorController = mApplication.Container.Resolve<CategorieSelectorController>();
@@ -101,6 +102,7 @@ namespace _2DO_Client.Controller
             UpdateTasksFromDB();
         }
 
+        #endregion
 
         #region Sorting
 
@@ -117,24 +119,27 @@ namespace _2DO_Client.Controller
                 {
                     case 1:
                         temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.CreationDate).ToList();
+                        mMainWindowViewModel.TaskModels.Clear();
                         break;
                     case 2:
                         temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.Comment).ToList();
+                        mMainWindowViewModel.TaskModels.Clear();
                         break;
                     case 3:
                         temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.DueDate).ToList();
+                        mMainWindowViewModel.TaskModels.Clear();
                         break;
                     case 4:
                         temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.Priority).ToList();
+                        mMainWindowViewModel.TaskModels.Clear();
                         break;
                     case 5:
                         temp = mMainWindowViewModel.TaskModels.OrderBy(x => x.DueDate).ThenByDescending(x => x.Priority).ToList();
+                        mMainWindowViewModel.TaskModels.Clear();
                         break;
                     default:
                         break;
                 }
-
-                mMainWindowViewModel.TaskModels.Clear();
 
                 if (temp != null)
                 {
@@ -374,6 +379,7 @@ namespace _2DO_Client.Controller
         public void SelectCmd(object obj)
         {
             UpdateTasksFromDB();
+            mMainWindowViewModel.SortSelect = "-";
         }
 
         #endregion
@@ -418,7 +424,7 @@ namespace _2DO_Client.Controller
                 var listOfCategoryRelationsIDs = mServiceController.GetAllCategoriesToTasks().Where(x =>
                     x.CategoryID == areaCategorysSelectorController.GetSelectedElement().ID).Select(x => x.TaskID).ToList();
 
-                var test = mServiceController.GetAllTasks().Where(x => !listOfCategoryRelationsIDs.Contains(x.ID)).ToList();
+                var test = mServiceController.GetAllTasks().Where(x => !listOfCategoryRelationsIDs.Contains(x.ID)).OrderBy(x => x.Comment).ToList();
 
                 mConnectTaskToCategorieWindowController.setList(test);
 
