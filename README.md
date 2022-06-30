@@ -7,7 +7,7 @@
 
 ## Dokumentation
 
-[Hier gehts zu den Dokumentationen!](https://github.com/FelixWochele/2DO/blob/master/Dokumentation%20-%20Wochele%20Felix%20-%20TInf2020.pdf)
+[Hier gehts zu der Dokumentation!](https://github.com/FelixWochele/2DO/blob/master/Dokumentation%20-%20Wochele%20Felix%20-%20TInf2020.pdf)
 
 ## Bei Problemen:
 
