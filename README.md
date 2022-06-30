@@ -7,7 +7,7 @@
 
 ## Dokumentation
 
-[Hier gehts zu den Dokumentationen!](https://google.com/)
+[Hier gehts zu den Dokumentationen!](/INF2020 Klausurersatzleistung.pdf)
 
 
 ## Bei Problemen:
