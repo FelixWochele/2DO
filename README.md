@@ -2,8 +2,8 @@
 
 <img align="right" width="220" height="90" src="https://upload.wikimedia.org/wikipedia/de/thumb/1/1d/DHBW-Logo.svg/541px-DHBW-Logo.svg.png?20110626153129">
 
-[![forthebadge made-with-C-Scharf](https://forthebadge.com/images/badges/made-with-c-sharp.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/DHBW-Inf20/2048/)
+[![forthebadge made-with-java](https://img.shields.io/badge/MADE_WITH-JAVA-orange?style=for-the-badge)](https://java.com/)
+[![forthebadge](https://img.shields.io/badge/BUILD_WITH-LOVE_%3C3-D20E0E?style=for-the-badge)](https://github.com/FelixWochele/Bierbock)
 
 ## Dokumentation
 
